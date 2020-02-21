@@ -1,0 +1,51 @@
+@import "../global";
+
+// If you want to override variables do it here
+@import "variables";
+
+// Import styles
+@import "~@coreui/coreui/scss/coreui";
+
+// Fix mobile footer
+.app-footer {
+    flex: 0 0;
+    padding-top: map-get($spacers, 3);
+    padding-bottom: map-get($spacers, 3);
+}
+
+.datepicker table tr td span {
+    display: block;
+    width: 23%;
+    height: 54px;
+    line-height: 54px;
+    float: left;
+    margin: 1%;
+    cursor: pointer;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.datepicker table tr td.day {
+    width: 15%;
+    margin: 7%;
+    border-radius: 4px;
+    padding: 5px;
+    cursor: pointer;
+}
+td.disabled.day, span.year.disabled, span.month.disabled {
+    color: #ccc;
+}
+.datepicker td, .datepicker th{
+    height: 30px !important;
+    line-height: 25px !important;
+}
+.datepicker table tr td.active.active, .datepicker table tr td.active.active:hover{
+    background: #1f2746;
+}
+.datepicker table tr td.old, .datepicker table tr td.new {
+    color: #212529 !important;
+}
+.datepicker-dropdown{
+    box-shadow: none;
+}

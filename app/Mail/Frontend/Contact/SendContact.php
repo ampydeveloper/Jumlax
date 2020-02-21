@@ -1,0 +1,46 @@
+<?php
+
+namespace App\Mail\Frontend\Contact;
+
+use Illuminate\Http\Request;
+use Illuminate\Bus\Queueable;
+use Illuminate\Mail\Mailable;
+use Illuminate\Queue\SerializesModels;
+
+/**
+ * Class SendContact.
+ */
+class SendContact extends Mailable
+{
+    use Queueable, SerializesModels;
+
+    /**
+     * @var Request
+     */
+    public $request;
+
+    /**
+     * SendContact constructor.
+     *
+     * @param Request $request
+     */
+    public function __construct(Request $request)
+    {
+        $this->request = $request;
+    }
+
+    /**
+     * Build the message.
+     *
+     * @return $this
+     */
+    public function build()
+    {
+        return $this->from(config('mail.from.address'), config('mail.from.name'))
+            ->to(config('mail.from.address'), config('mail.from.name'))
+            ->view('frontend.mail.booked')
+            ->text('frontend.mail.booked-text')
+            ->subject(__('strings.emails.contact.subject', ['app_name' => app_name()]))
+            ->replyTo($this->request->email, $this->request->name);
+    }
+}
