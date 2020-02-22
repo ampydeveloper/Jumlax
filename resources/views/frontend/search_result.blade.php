@@ -330,19 +330,74 @@
                         </li>
                     </ul>
                     @endforeach
-                    {{ $paginatedItems->links() }}
                     @endif
                 </div>
             </div>
+            <div class="col-5">
+                <div class="total-user">
+                </div>
+            </div>
+            <div class="col-7">
+                <div class="float-right">
+                <nav class="page-number"></nav>
+                </div>
+            </div><!--col-->
 
         </div>
     </div>
 </section>
 @endsection
-
+<style>
+    nav.page-number.light-theme.simple-pagination ul li {
+    position: relative;
+    display: block;
+    margin-left: -1px;
+    line-height: 1.25;
+    color: #20a8d8;
+    float: left
+}
+   nav.page-number.light-theme.simple-pagination ul li.active span {
+       position: relative;
+    display: block;
+    padding: 0.5rem 0.75rem;
+    margin-left: -1px;
+    line-height: 1.25;
+    color: #fff;
+    background-color: #007bff;
+    border: 1px solid #dee2e6;
+}
+</style>
 @push('scripts')
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/jquery.simplePagination.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
+           
+        var items = $(".list-tickets");
+        var numItems = items.length;
+        var perPage = 5;
+        $(".total-user").text(numItems + ' Total Flight Search');
+
+        items.slice(perPage).hide();
+
+        $('.page-number').pagination({
+            items: numItems,
+            itemsOnPage: perPage,
+            prevText: "&laquo;",
+            nextText: "&raquo;",
+            onPageClick: function (pageNumber) {
+                var showFrom = perPage * (pageNumber - 1);
+                var showTo = showFrom + perPage;
+                items.hide().slice(showFrom, showTo).show();
+            }
+        });
+        
+        var p = $(".list-tickets").first();
+        $(document).on('click', '.page-link', function(){
+              $("html, body").animate({
+                scrollTop: p.scrollTop()
+            }, 1000);
+        });
+        
         $(".search-from, .search-to").select2({
             ajax: {
                 url: '/get-lisit',

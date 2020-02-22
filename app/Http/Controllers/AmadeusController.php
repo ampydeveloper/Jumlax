@@ -135,7 +135,7 @@ class AmadeusController extends Controller {
         //        dump($passenger_adult);
         //        dump($passenger_child);
         //        dump($passenger_infant);
-        //        dd($popular_destination);
+//                dd($popular_destination);
         if ($departure == null) {
             return redirect()->back()->with('message', 'Departure field is required.');
         }
@@ -314,10 +314,11 @@ class AmadeusController extends Controller {
                 $data['flights'] = $flights;
                 $data['status'] = 202;
             } else if (!empty($res['errors'])) {
-                return response()->json(['errors' => $res['errors']], 500);
+                return redirect()->back()->with('message', $res['errors']);
+//                return response()->json(['errors' => $res['errors']], 500);
             } else {
-                return response()->json(['message' => 'No itinerary found for requested segment!'], 500);
-//                return redirect()->back()->with('message', 'No itinerary found for requested segment!');
+//                return response()->json(['message' => 'No itinerary found for requested segment!'], 500);
+                return redirect()->back()->with('message', 'No itinerary found for requested segment!');
             }
         }
 
@@ -328,6 +329,7 @@ class AmadeusController extends Controller {
         $data['airline'] = AirlineDetails::get();
         $data['requestdata'] = $requestdata;
 
+//        dd($data);
 
         $currentPage = LengthAwarePaginator::resolveCurrentPage();
         $itemCollection = collect($data['flights']);
@@ -336,7 +338,8 @@ class AmadeusController extends Controller {
         $paginatedItems = new LengthAwarePaginator($currentPageItems, count($itemCollection), $perPage);
 //        dd($request->url());
         $paginatedItems->setPath(url('flight-search-listing'));
-        $data['paginatedItems'] = $paginatedItems;
+//        $data['paginatedItems'] = $paginatedItems;
+         $data['paginatedItems'] = $data['flights'];
 //        dd($data['paginatedItems']);
         Session::put('amadeus_result_data', $data);
         // return response()->json(['url' => url('flight-search-listing')], 200);
@@ -359,7 +362,8 @@ class AmadeusController extends Controller {
         $currentPageItems = $itemCollection->slice(($currentPage * $perPage) - $perPage, $perPage)->all();
         $paginatedItems = new LengthAwarePaginator($currentPageItems, count($itemCollection), $perPage);
         $paginatedItems->setPath(url('flight-search-listing'));
-        $data['paginatedItems'] = $paginatedItems;
+//        $data['paginatedItems'] = $paginatedItems;
+         $data['paginatedItems'] = $data['flights'];
         $data['currentPage'] = $currentPage;
         return view('frontend.search_result', $data);
     }
