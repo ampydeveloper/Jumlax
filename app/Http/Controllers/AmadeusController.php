@@ -301,8 +301,8 @@ class AmadeusController extends Controller {
                 $data['flights'] = $flights;
                 $data['status'] = 202;
             } else if (!empty($res['errors'])) {
-//                return redirect()->back()->with('message', $res['errors']);
-                return response()->json(['errors' => $res['errors']], 500);
+                return redirect()->back()->with('message', $res['errors']);
+//                return response()->json(['errors' => $res['errors']], 500);
             } else {
 //                return response()->json(['message' => 'No itinerary found for requested segment!'], 500);
                 return redirect()->back()->with('message', 'No itinerary found for requested segment!');
