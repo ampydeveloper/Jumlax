@@ -34,7 +34,7 @@ class AmadeusController extends Controller {
             CURLOPT_TIMEOUT => 30,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => "POST",
-            CURLOPT_POSTFIELDS => "client_id=6tWUgreARQD1FRLJq4pJriQw0idk8Lhb&client_secret=QmlGkk2XqQXnKXe5&grant_type=client_credentials",
+            CURLOPT_POSTFIELDS => "client_id=4feqw2rFNnRlG1x5njSuAwZPqTVVLi0x&client_secret=2woTiWNQSlKOh7mI&grant_type=client_credentials",
         ));
 
         $response = curl_exec($curl);
@@ -65,7 +65,6 @@ class AmadeusController extends Controller {
     public function getAirPortListing(Request $request) {
         $method = $request->method();
 
-//        dd($method);
         if ($method == 'POST') {
             $airport = AirportDetails::Where('airport_name', 'like', '%' . $request->message . '%')
                     ->orWhere('city_name', 'like', '%' . $request->message . '%')
@@ -79,7 +78,6 @@ class AmadeusController extends Controller {
             }
         } else {
             $airport = AirportDetails::where('country_abbrev', 'IN')->get();
-//            dd($airport->toArray());
             $data['airports'] = $airport;
             return view('frontend.index', $data);
         }
@@ -94,7 +92,6 @@ class AmadeusController extends Controller {
 
     public function getCharterFromListing(Request $request) {
 
-//        dd('123');
         $method = $request->method();
 
         $airport = CharterPlaneFlightDetails::with('planes')
@@ -109,9 +106,7 @@ class AmadeusController extends Controller {
     }
 
     public function getCharterToListing(Request $request) {
-//        dd('123');
         $method = $request->method();
-//pr($method);
         $airport = CharterPlaneFlightDetails::with('planes')
                 ->Where('to', 'like', '%' . $request->message . '%')
 //            ->orWhere('name', 'like', '%' . $request->message . '%')
@@ -140,7 +135,7 @@ class AmadeusController extends Controller {
         dump($passenger_adult);
         dump($passenger_child);
         dump($passenger_infant);
-        dd($popular_destination);
+//        dd($popular_destination);
         if ($departure == null) {
             return redirect()->back()->with('message', 'Departure field is required.');
         }
