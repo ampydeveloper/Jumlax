@@ -34,7 +34,7 @@ class AmadeusController extends Controller {
             CURLOPT_TIMEOUT => 30,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => "POST",
-            CURLOPT_POSTFIELDS => "client_id=6tWUgreARQD1FRLJq4pJriQw0idk8Lhb&client_secret=QmlGkk2XqQXnKXe5&grant_type=client_credentials",
+            CURLOPT_POSTFIELDS => "client_id=4feqw2rFNnRlG1x5njSuAwZPqTVVLi0x&client_secret=2woTiWNQSlKOh7mI&grant_type=client_credentials",
         ));
 
         $response = curl_exec($curl);
@@ -130,17 +130,17 @@ class AmadeusController extends Controller {
      */
 
     public function getFlightListing(Request $request, $passenger_class, $flight_type, $from, $to, $departure, $return = null, $passenger_adult = 1, $passenger_child = 0, $passenger_infant = 0, $popular_destination) {
-        dump($request->all());
-        dump($passenger_class);
-        dump($flight_type);
-        dump($from);
-        dump($to);
-        dump($departure);
-        dump($return);
-        dump($passenger_adult);
-        dump($passenger_child);
-        dump($passenger_infant);
-        dd($popular_destination);
+//        dump($request->all());
+//        dump($passenger_class);
+//        dump($flight_type);
+//        dump($from);
+//        dump($to);
+//        dump($departure);
+//        dump($return);
+//        dump($passenger_adult);
+//        dump($passenger_child);
+//        dump($passenger_infant);
+//        dd($popular_destination);
         if ($departure == null) {
             return redirect()->back()->with('message', 'Departure field is required.');
         }
