@@ -684,6 +684,12 @@
                 $(".city").val($(this).attr('data-city'));
                 $("#most-search").submit();
             });
+            
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            })
             $(".amadeus-flight-search").on('submit', function (e) {
                 e.preventDefault();
                 // return false;
@@ -706,23 +712,23 @@
                 }else{
                     flightType = "oneway";
                 }
-                actionUrlFinal = actionUrl + '/' + passengerClass + '/' + flightType + '/' + from + '/' + to + '/' + departureVal + '/' + returnVal + '/' + passengerAdult + '/' + passengerChild + '/' + passengerInfant + '/' + '0';
+                var parameters = '/' + passengerClass + '/' + flightType + '/' + from + '/' + to + '/' + departureVal + '/' + returnVal + '/' + passengerAdult + '/' + passengerChild + '/' + passengerInfant + '/' + '0';
+                actionUrlFinal = actionUrl + parameters;
                 // console.log(actionUrl);
                 // console.log(actionUrlFinal);
-                // $.ajax({
-                    // type: "GET",
-                    // url: actionUrlFinal,
-                    // dataType: "json",
-                    // data: $this.serialize(),
-                    // success: function (data) {
-                        location.href = actionUrlFinal;
-                    // },
-                    // error: function (error) {
-                        // $(".amadeus-flight-search").find('.submit-fm button').attr("disabled", false);
-                        // siyApp.ajaxInputError(error, $(".amadeus-flight-search"));
-                    // }
-                // });
-                // e.preventDefault();
+                 $.ajax({
+                     type: "GET",
+                     url: actionUrlFinal,
+                     dataType: "json",
+                     success: function (data) {
+                        location.href = 'flight-search-listing' + parameters;
+                     },
+                     error: function (error) {
+                         $(".amadeus-flight-search").find('.submit-fm button').attr("disabled", false);
+                         siyApp.ajaxInputError(error, $(".amadeus-flight-search"));
+                     }
+                 });
+                 e.preventDefault();
             });
         });
     </script>
