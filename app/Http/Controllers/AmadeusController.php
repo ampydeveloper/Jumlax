@@ -125,17 +125,17 @@ class AmadeusController extends Controller {
      */
 
     public function getFlightListing(Request $request, $passenger_class, $flight_type, $from, $to, $departure, $return = null, $passenger_adult = 1, $passenger_child = 0, $passenger_infant = 0, $popular_destination) {
-        dump($request->all());
-        dump($passenger_class);
-        dump($flight_type);
-        dump($from);
-        dump($to);
-        dump($departure);
-        dump($return);
-        dump($passenger_adult);
-        dump($passenger_child);
-        dump($passenger_infant);
-//        dd($popular_destination);
+        //        dump($request->all());
+        //        dump($passenger_class);
+        //        dump($flight_type);
+        //        dump($from);
+        //        dump($to);
+        //        dump($departure);
+        //        dump($return);
+        //        dump($passenger_adult);
+        //        dump($passenger_child);
+        //        dump($passenger_infant);
+        //        dd($popular_destination);
         if ($departure == null) {
             return redirect()->back()->with('message', 'Departure field is required.');
         }
