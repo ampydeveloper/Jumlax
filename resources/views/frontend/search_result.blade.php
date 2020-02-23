@@ -117,7 +117,7 @@
 
                     @else
 
-                    <h2 class="text-ubold">{{$from->city_name}}, {{$from->country_abbrev}} ({{$from->airport_code}}) to {{$to->city_name}}, {{$to->country_abbrev}} ({{$to->airport_code}})</h2>
+                    <h2 class="text-ubold">{{$from['city_name']}}, {{$from['country_abbrev']}} ({{$from['airport_code']}}) to {{$to['city_name']}}, {{$to['country_abbrev']}} ({{$to['airport_code']}})</h2>
                     <hr class="divider divider-lg-left divider-primary divider-80">
 
                     @foreach($paginatedItems as $key=>$flight)

@@ -421,6 +421,12 @@ dl {
     /*flex-basis: 50%*/
 }
 
+.list-item-top:hover {
+    .plane-change-tooltip {
+        opacity: 1;
+    }
+}
+
 @media(min-width:768px) {
     .list-tickets .list-item-top,
     .list-tickets .list-item-bottom {

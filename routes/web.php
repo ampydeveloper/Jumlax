@@ -52,7 +52,6 @@ Route::post('/get-charter-to-lisit', 'AmadeusController@getCharterToListing');
 Route::post('/save-airport', 'AmadeusController@saveAirport');
 
 Route::get('/flight-search/{passenger_class}/{flight_type}/{from}/{to}/{departure}/{return}/{passenger_adult}/{passenger_child}/{passenger_infant}/{popular_destination}', 'AmadeusController@getFlightListing');
-//Route::get('/flight-search-listing', 'AmadeusController@getFlightListingView');
 Route::get('/flight-search-listing/{passenger_class}/{flight_type}/{from}/{to}/{departure}/{return}/{passenger_adult}/{passenger_child}/{passenger_infant}/{popular_destination}', 'AmadeusController@getFlightListingView');
 
 

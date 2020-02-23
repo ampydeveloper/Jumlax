@@ -124,13 +124,7 @@ class AmadeusController extends Controller {
      * return flight details
      */
 
-    public function getFlightListing(Request $request, $passenger_class, $flight_type, $from, $to, $departure, $return = null, $passenger_adult = 1, $passenger_child = 0, $passenger_infant = 0, $popular_destination) {
-        
-        $sessiondata = Session::get('amadeus_result_data');
-        if($sessiondata){
-           // return view('frontend.search_result', $sessiondata);
-        }
-     
+    public function getFlightListing($passenger_class, $flight_type, $from, $to, $departure, $return = null, $passenger_adult = 1, $passenger_child = 0, $passenger_infant = 0, $popular_destination) {     
            
         if ($departure == null) {
             return redirect()->back()->with('message', 'Departure field is required.');
@@ -335,13 +329,18 @@ class AmadeusController extends Controller {
          $data['paginatedItems'] = $data['flights'];
 //        dd($data['paginatedItems']);
         Session::put('amadeus_result_data', $data);
-         return response()->json(['url' => url('flight-search-listing')], 200);
+         return response()->json(['data' => $data], 200);
 //        return redirect(url('flight-search-listing'));
         die;
     }
 
-    public function getFlightListingView(Request $request) {
+    public function getFlightListingView(Request $request, $passenger_class, $flight_type, $from, $to, $departure, $return = null, $passenger_adult = 1, $passenger_child = 0, $passenger_infant = 0, $popular_destination) {
         $data = Session::get('amadeus_result_data');
+        
+        if(!$data){
+            $makeRequest = $this->getFlightListing($passenger_class, $flight_type, $from, $to, $departure, $return = null, $passenger_adult = 1, $passenger_child = 0, $passenger_infant = 0, $popular_destination);
+            $data = json_decode(json_encode($makeRequest), true)['original']['data'];
+        }
 
         $parts = parse_url(\Request::getRequestUri());
         if (isset($parts['query'])) {

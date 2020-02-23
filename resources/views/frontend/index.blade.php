@@ -712,20 +712,20 @@
                 }else{
                     flightType = "oneway";
                 }
-                actionUrlFinal = actionUrl + '/' + passengerClass + '/' + flightType + '/' + from + '/' + to + '/' + departureVal + '/' + returnVal + '/' + passengerAdult + '/' + passengerChild + '/' + passengerInfant + '/' + '0';
+                var parameters = '/' + passengerClass + '/' + flightType + '/' + from + '/' + to + '/' + departureVal + '/' + returnVal + '/' + passengerAdult + '/' + passengerChild + '/' + passengerInfant + '/' + '0';
+                actionUrlFinal = actionUrl + parameters;
                 // console.log(actionUrl);
                 // console.log(actionUrlFinal);
                  $.ajax({
                      type: "GET",
                      url: actionUrlFinal,
                      dataType: "json",
-//                     data: $this.serialize(),
                      success: function (data) {
-                        location.href = actionUrlFinal;
+                        location.href = 'flight-search-listing' + parameters;
                      },
                      error: function (error) {
                          $(".amadeus-flight-search").find('.submit-fm button').attr("disabled", false);
-//                         siyApp.ajaxInputError(error, $(".amadeus-flight-search"));
+                         siyApp.ajaxInputError(error, $(".amadeus-flight-search"));
                      }
                  });
                  e.preventDefault();
