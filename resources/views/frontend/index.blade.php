@@ -19,7 +19,15 @@
 
                 </div>
             </div>
-
+ <div class="toast" style="display: none" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+              <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="toast-body">
+            </div>
+        </div>
             <div class="swiper-onSlider header-back-outer">
                 @include('frontend.includes.nav')
                 <div class="container container-wide section-70 section-xxl-top-200 section-xxl-bottom-220">
@@ -453,6 +461,15 @@
 
     </section>
     @endsection
+    <style>
+        .toast {
+    position: absolute;
+    opacity: 1 !important;
+    z-index: 999999;
+    right: 0;
+    top: 50%;
+}
+    </style>
     @push('scripts')
     <script type="text/javascript">
         $(document).ready(function () {
@@ -723,7 +740,16 @@
                      success: function (data) {
                         location.href = 'flight-search-listing' + parameters;
                      },
-                     error: function (error) {
+                     error: function (xhr, status, error) {
+                          var res = $.parseJSON(xhr.responseText);
+                         if(!res.status){
+                             var html = '';
+                             for(var i =0; i<res.errors.length; i++){
+                                 html += '<span style="display:flex; color:red">'+res.errors[i].detail+'</span>'; 
+                             }
+                             $(".toast-body").append(html);
+                             $(".toast").show();
+                          }
                          $(".amadeus-flight-search").find('.submit-fm button').attr("disabled", false);
                          siyApp.ajaxInputError(error, $(".amadeus-flight-search"));
                      }

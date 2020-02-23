@@ -302,10 +302,11 @@ class AmadeusController extends Controller {
                 $data['status'] = 202;
             } else if (!empty($res['errors'])) {
 //                return redirect()->back()->with('message', $res['errors']);
-                return response()->json(['errors' => $res['errors']], 500);
+//                dd($res);
+                return response()->json(['status' => false, 'errors' => $res['errors']], 400);
             } else {
-//                return response()->json(['message' => 'No itinerary found for requested segment!'], 500);
-                return redirect()->back()->with('message', 'No itinerary found for requested segment!');
+                return response()->json(['status' => false, 'message' => 'No itinerary found for requested segment!'], 400);
+//                return redirect()->back()->with('message', 'No itinerary found for requested segment!');
             }
         }
 
@@ -329,7 +330,7 @@ class AmadeusController extends Controller {
          $data['paginatedItems'] = $data['flights'];
 //        dd($data['paginatedItems']);
         Session::put('amadeus_result_data', $data);
-         return response()->json(['data' => $data], 200);
+         return response()->json(['status' => true, 'data' => $data], 200);
 //        return redirect(url('flight-search-listing'));
         die;
     }

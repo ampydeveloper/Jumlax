@@ -12,6 +12,15 @@
 
 <section class="container-fluid search-nav-form">
     <div class="container">
+        <div class="toast" style="display: none" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+              <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="toast-body">
+            </div>
+        </div>
         <form class="small home-search-fm" action="{{url('flight-search')}}" method="get">
             <div class="row">
 
@@ -59,12 +68,12 @@
                         <div class="col-sm-4 col-lg-3 search-dividion-one">
                             <div class="col-sm-6">
                                 <label class="form-label-outside">Departure</label>
-                                <input class="form-input form-control-has-validation form-control-last-child" id="departure" type="text" data-constraints="@Required" name="departure"  value="{{$requestdata['departure']}}">
+                                <input class="form-input form-control-has-validation form-control-last-child" id="departure" name="departure" type="text" data-constraints="@Required" name="departure"  value="{{$requestdata['departure']}}">
                             </div>
                             <?php if (!empty($requestdata['return'])) { ?>
                                 <div class="col-sm-6" id="returnDateCol">
                                     <label class="form-label-outside">Return</label>
-                                    <input class="form-input form-control-has-validation form-control-last-child" id="return" type="text" data-constraints="@Required" name="return" value="<?php (isset($requestdata['return']) && !empty($requestdata['return'])) ? $requestdata['return'] : ''; ?>">
+                                    <input class="form-input form-control-has-validation form-control-last-child" id="return" name="return" type="text" data-constraints="@Required" name="return" value="<?php (isset($requestdata['return']) && !empty($requestdata['return'])) ? $requestdata['return'] : ''; ?>">
                                 </div>
                             <?php } ?>
                         </div>
@@ -73,10 +82,10 @@
                             <div class="col-sm-6">
                                 <label class="form-label-outside">Class</label>
                                 <select class="form-input" name="passenger-class">
-                                    <option value="1" <?php echo ($requestdata['passenger_class'] == "ECONOMY") ? 'selected' : ''; ?> >Economy</option>
-                                    <option value="2" <?php echo ($requestdata['passenger_class'] == 'PREMIUM_ECONOMY') ? 'selected' : ''; ?> >Premium</option>
-                                    <option value="3" <?php echo ($requestdata['passenger_class'] == 'BUSINESS') ? 'selected' : ''; ?> >Business</option>
-                                    <option value="4" <?php echo ($requestdata['passenger_class'] == 'FIRST') ? 'selected' : ''; ?> >First</option>
+                                    <option value="ECONOMY" <?php echo ($requestdata['passenger_class'] == "ECONOMY") ? 'selected' : ''; ?> >Economy</option>
+                                    <option value="PREMIUM_ECONOMY" <?php echo ($requestdata['passenger_class'] == 'PREMIUM_ECONOMY') ? 'selected' : ''; ?> >Premium</option>
+                                    <option value="BUSINESS" <?php echo ($requestdata['passenger_class'] == 'BUSINESS') ? 'selected' : ''; ?> >Business</option>
+                                    <option value="FIRST" <?php echo ($requestdata['passenger_class'] == 'FIRST') ? 'selected' : ''; ?> >First</option>
                                 </select>
                             </div>
                             <div class="col-sm-6 passengers-all-type">
@@ -92,7 +101,7 @@
                 </div>
                 <div class="col-sm-12 col-lg-1 submit-fm-out">
                     <div class="submit-fm text-xl-right">
-                        <button class="button button-primary button-sm button-naira button-naira-up" type="submit">
+                        <button class="button button-primary button-sm button-naira button-naira-up" id="for-msubmit">
                             <span class="icon fas fa-search"></span>
                             <span>Search</span>
                         </button>
@@ -366,6 +375,13 @@
     background-color: #007bff;
     border: 1px solid #dee2e6;
 }
+.toast {
+    position: absolute;
+    opacity: 1 !important;
+    z-index: 999999;
+    right: 0;
+    top: 50%;
+}
 </style>
 @push('scripts')
  <script src="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/jquery.simplePagination.js"></script>
@@ -527,14 +543,64 @@
                 startDate: departureDate
             });
         });
-        $('.pagination .page-item').removeClass('active');
-//        $('.pagination .page-item').each(function(){
-//            var $this = $(this);
-//            if($this.find('a').text() == 0){
-//                $this.addClass('active');
-//            }
-//        });
-//        
+        
+        
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            })
+            $(".home-search-fm").on('submit', function (e) {
+                e.preventDefault();
+                // return false;
+                var $this = $(this);
+                $this.find('#for-msubmit').attr("disabled", true);
+                var flightType = $this.find('[name="flight_type"]').val(),
+                        from = $this.find('[name="from"]').val(),
+                        to = $this.find('[name="to"]').val(),
+                        passengerClass = $this.find('[name="passenger-class"]').val(),
+                        departure = $this.find('[name="departure"]').val(),
+                        departureVal = new Date(departure).toJSON().slice(0, 10),
+                        returnVal = null,
+                        passengerAdult = $this.find('[name="passenger_adult"]').val(),
+                        passengerChild = $this.find('[name="passenger_child"]').val(),
+                        passengerInfant = $this.find('[name="passenger_infant"]').val(),
+                        actionUrl = $this.attr('action');
+                var returnData = $this.find('[name="return"]').val().trim();
+                if(returnData && returnData.length > 0){
+                    returnVal = new Date(returnData).toJSON().slice(0, 10);
+                }else{
+                    flightType = "oneway";
+                }
+                var parameters = '/' + passengerClass + '/' + flightType + '/' + from + '/' + to + '/' + departureVal + '/' + returnVal + '/' + passengerAdult + '/' + passengerChild + '/' + passengerInfant + '/' + '0';
+                actionUrlFinal = actionUrl + parameters;
+                // console.log(actionUrl);
+                // console.log(actionUrlFinal);
+                 $.ajax({
+                     type: "GET",
+                     url: actionUrlFinal,
+                     dataType: "json",
+                     success: function (data) {
+                         console.log(data);
+                        location.href = '/flight-search-listing' + parameters;
+                     },
+                     error: function (xhr, status, error) {
+                         var res = $.parseJSON(xhr.responseText);
+                         if(!res.status){
+                             var html = '';
+                             for(var i =0; i<res.errors.length; i++){
+                                 html += '<span style="display:flex; color:red">'+res.errors[i].detail+'</span>'; 
+                             }
+                             $(".toast-body").append(html);
+                             $(".toast").show();
+                          }
+                         $(".home-search-fm").find('#for-msubmit').attr("disabled", false);
+                         siyApp.ajaxInputError(error, $(".home-search-fm"));
+                     }
+                 });
+                 e.preventDefault();
+            });
+
     });
 </script>
 @endpush
