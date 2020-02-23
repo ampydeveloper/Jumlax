@@ -684,6 +684,12 @@
                 $(".city").val($(this).attr('data-city'));
                 $("#most-search").submit();
             });
+            
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            })
             $(".amadeus-flight-search").on('submit', function (e) {
                 e.preventDefault();
                 // return false;
@@ -709,20 +715,20 @@
                 actionUrlFinal = actionUrl + '/' + passengerClass + '/' + flightType + '/' + from + '/' + to + '/' + departureVal + '/' + returnVal + '/' + passengerAdult + '/' + passengerChild + '/' + passengerInfant + '/' + '0';
                 // console.log(actionUrl);
                 // console.log(actionUrlFinal);
-                // $.ajax({
-                    // type: "GET",
-                    // url: actionUrlFinal,
-                    // dataType: "json",
-                    // data: $this.serialize(),
-                    // success: function (data) {
+                 $.ajax({
+                     type: "GET",
+                     url: actionUrlFinal,
+                     dataType: "json",
+//                     data: $this.serialize(),
+                     success: function (data) {
                         location.href = actionUrlFinal;
-                    // },
-                    // error: function (error) {
-                        // $(".amadeus-flight-search").find('.submit-fm button').attr("disabled", false);
-                        // siyApp.ajaxInputError(error, $(".amadeus-flight-search"));
-                    // }
-                // });
-                // e.preventDefault();
+                     },
+                     error: function (error) {
+                         $(".amadeus-flight-search").find('.submit-fm button').attr("disabled", false);
+//                         siyApp.ajaxInputError(error, $(".amadeus-flight-search"));
+                     }
+                 });
+                 e.preventDefault();
             });
         });
     </script>

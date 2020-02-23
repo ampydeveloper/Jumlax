@@ -528,12 +528,12 @@
             });
         });
         $('.pagination .page-item').removeClass('active');
-        $('.pagination .page-item').each(function(){
-            var $this = $(this);
-            if($this.find('a').text() == {{$currentPage}}){
-                $this.addClass('active');
-            }
-        });
+//        $('.pagination .page-item').each(function(){
+//            var $this = $(this);
+//            if($this.find('a').text() == 0){
+//                $this.addClass('active');
+//            }
+//        });
 //        
     });
 </script>

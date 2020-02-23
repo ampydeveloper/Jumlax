@@ -125,17 +125,13 @@ class AmadeusController extends Controller {
      */
 
     public function getFlightListing(Request $request, $passenger_class, $flight_type, $from, $to, $departure, $return = null, $passenger_adult = 1, $passenger_child = 0, $passenger_infant = 0, $popular_destination) {
-        //        dump($request->all());
-        //        dump($passenger_class);
-        //        dump($flight_type);
-        //        dump($from);
-        //        dump($to);
-        //        dump($departure);
-        //        dump($return);
-        //        dump($passenger_adult);
-        //        dump($passenger_child);
-        //        dump($passenger_infant);
-//                dd($popular_destination);
+        
+        $sessiondata = Session::get('amadeus_result_data');
+        if($sessiondata){
+           // return view('frontend.search_result', $sessiondata);
+        }
+     
+           
         if ($departure == null) {
             return redirect()->back()->with('message', 'Departure field is required.');
         }
@@ -231,9 +227,6 @@ class AmadeusController extends Controller {
             $amadeus->save();
         }
 
-//        echo '<pre>';
-//        print_r($res);
-//        die();
         if ($res) {
             if (!empty($res['data'])) {
                 $ticketsRequired = $passenger_adult + $passenger_child;
@@ -314,8 +307,8 @@ class AmadeusController extends Controller {
                 $data['flights'] = $flights;
                 $data['status'] = 202;
             } else if (!empty($res['errors'])) {
-                return redirect()->back()->with('message', $res['errors']);
-//                return response()->json(['errors' => $res['errors']], 500);
+//                return redirect()->back()->with('message', $res['errors']);
+                return response()->json(['errors' => $res['errors']], 500);
             } else {
 //                return response()->json(['message' => 'No itinerary found for requested segment!'], 500);
                 return redirect()->back()->with('message', 'No itinerary found for requested segment!');
@@ -342,8 +335,8 @@ class AmadeusController extends Controller {
          $data['paginatedItems'] = $data['flights'];
 //        dd($data['paginatedItems']);
         Session::put('amadeus_result_data', $data);
-        // return response()->json(['url' => url('flight-search-listing')], 200);
-        return redirect(url('flight-search-listing'));
+         return response()->json(['url' => url('flight-search-listing')], 200);
+//        return redirect(url('flight-search-listing'));
         die;
     }
 
