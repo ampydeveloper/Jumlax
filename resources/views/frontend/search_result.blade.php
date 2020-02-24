@@ -245,21 +245,23 @@
                                                     @else
                                                     {{$flight['oneWayDetails']['stops']['total']}} stops
                                                     @endif
-                                                </div>
-                                                <div class="tooltip plane-change-tooltip" role="tooltip">
-                                                    <div class="arrow"></div>
-                                                    <div class="tooltip-inner">
+                                                    
+                                                    <div class="tooltip plane-change-tooltip" role="tooltip">
+                                                        <div class="arrow"></div>
+                                                        <div class="tooltip-inner">
 
-                                                        @if(is_array($flight['oneWayDetails']['stops']))
-                                                        @foreach($flight['oneWayDetails']['stops'] as $key => $stop) 
-                                                        @if($key != 'total')
-                                                        {{$key." ".$stop['iataCode']}} <br>
-                                                        @if(isset($stop['terminal']))
-                                                        {{'Terminal '.$stop['terminal']}} <br>
-                                                        @endif
-                                                        @endif
-                                                        @endforeach
-                                                        @endif
+                                                            @if(is_array($flight['oneWayDetails']['stops']))
+                                                            {{count($flight['oneWayDetails']['stops']) - 1}} Plane change<br>
+                                                            @foreach($flight['oneWayDetails']['stops'] as $key => $stop) 
+                                                            @if($key != 'total')
+                                                            {{$key." ".$stop['iataCode']}} <br>
+                                                            @if(isset($stop['terminal']))
+                                                            {{'Terminal '.$stop['terminal']}} <br>
+                                                            @endif
+                                                            @endif
+                                                            @endforeach
+                                                            @endif
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -298,23 +300,23 @@
                                                     @else
                                                     {{$flight['returnDetails']['stops']['total']}} stops
                                                     @endif
-                                                </div>
+                                                    
+                                                    <div class="tooltip plane-change-tooltip" role="tooltip">
+                                                        <div class="arrow"></div>
 
-                                                <div class="tooltip plane-change-tooltip" role="tooltip">
-                                                    <div class="arrow"></div>
-
-                                                    <div class="tooltip-inner">
-                                                        <?php // dd(($flight['oneWayDetails']['stops'])); ?>
-                                                        @if(is_array($flight['returnDetails']['stops']))
-                                                        @foreach($flight['returnDetails']['stops'] as $key => $stop) 
-                                                        @if($key != 'total')
-                                                        {{$key." ".$stop['iataCode']}} <br>
-                                                        @if(isset($stop['terminal']))
-                                                        {{'Terminal '.$stop['terminal']}} <br>
-                                                        @endif
-                                                        @endif
-                                                        @endforeach
-                                                        @endif
+                                                        <div class="tooltip-inner">
+                                                            <?php // dd(($flight['oneWayDetails']['stops'])); ?>
+                                                            @if(is_array($flight['returnDetails']['stops']))
+                                                            @foreach($flight['returnDetails']['stops'] as $key => $stop) 
+                                                            @if($key != 'total')
+                                                            {{$key." ".$stop['iataCode']}} <br>
+                                                            @if(isset($stop['terminal']))
+                                                            {{'Terminal '.$stop['terminal']}} <br>
+                                                            @endif
+                                                            @endif
+                                                            @endforeach
+                                                            @endif
+                                                        </div>
                                                     </div>
                                                 </div>
 
@@ -400,6 +402,7 @@
             itemsOnPage: perPage,
             prevText: "&laquo;",
             nextText: "&raquo;",
+            hrefTextPrefix: "#",
             onPageClick: function (pageNumber) {
                 var showFrom = perPage * (pageNumber - 1);
                 var showTo = showFrom + perPage;

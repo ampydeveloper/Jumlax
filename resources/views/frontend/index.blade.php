@@ -61,6 +61,7 @@
                                                 </ul>
                                             </div>
                                             @endif
+                                            <div class="alert"></div>
                                             <div class="row-20 row-md-23">
                                                 <div class="col-lg-8 padding-remove round-one-way">
                                                     <div class="form-wrap radio-inline-wrapper">
@@ -114,13 +115,14 @@
                                                         <div class="col-sm-12 col-md-6 col-lg-3 float-left">
                                                             <div class="form-wrap">
                                                                 <label class="form-label-outside">Departure</label>
-                                                                <input class="form-input form-control-last-child" type="text"  name="departure" autocomplete="off" id="departure" min="<?php echo date('Y-m-d') ?>" required>
+                                                                <?php $date1 = date('Y-m-d'); $tomorrow = date('y-m-d',strtotime($date1 . "+1 days")); ?>
+                                                                <input class="form-input form-control-last-child" type="text"  name="departure" autocomplete="off" id="departure" min="<?php echo $date1 ?>" required>
                                                             </div>
                                                         </div>
                                                         <div class="col-sm-12 col-md-6 col-lg-3 float-left" id="return-area">
                                                             <div class="form-wrap">
                                                                 <label class="form-label-outside">Return</label>
-                                                                <input class="form-input form-control-last-child return" type="text" id="return" autocomplete="off" name="return" min="<?php echo date('Y-m-d') ?>">
+                                                                <input class="form-input form-control-last-child return" type="text" id="return" autocomplete="off" name="return" min="<?php echo $date1 ?>">
                                                             </div>
                                                         </div>
 
@@ -129,7 +131,7 @@
                                                                 <div class="form-wrap">
                                                                     <label class="form-label-outside">Adults (12y +)</label>
                                                                     <div class="stepper ">
-                                                                        <input name="passenger_adult" class="form-input stepper-input form-control-has-validation" type="number" min="1" max="10" value="1" data-constraints="@Numeric">
+                                                                        <input name="passenger_adult" class="form-input stepper-input form-control-has-validation" type="number" min="1" max="9" value="1" data-constraints="@Numeric">
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -380,6 +382,7 @@
         </div>
         <div class="most-search">
             <form action="{{url('flight-search')}}" method="get" id="most-search">
+                <div class="alert"></div>
                 {!! csrf_field() !!}
                 <?php
                 $var = date('Y-m-d');
@@ -475,13 +478,14 @@
         $(document).ready(function () {
             let departureDate, returnDate;
             var date = new Date();
-            date.setDate(date.getDate());
+            date.setDate(date.getDate()+1);
             $('#departure').datepicker({
-//                format: 'mm-dd-yyyy',
                 format: 'dd M yyyy',
                 startDate: date,
             });
-            $('#departure').datepicker('setDate', new Date());
+
+  $('#departure').datepicker('setDate', date);
+            //$('#departure').datepicker('setDate', new Date());
             $('#return').datepicker({
                 format: 'dd M yyyy',
                 startDate: date,
@@ -693,20 +697,56 @@
                 var $option = $("<option selected></option>").val(data.to).text(data.to);
                 $('.search-to-set-val-charter').empty().append($option);
             });
-            $(".popular-destination4").on('click', function () {
-                $(".city").val($(this).attr('data-city'));
-                $("#most-search").submit();
-            });
-            $(".thumbnail-variant-4").on('click', function () {
-                $(".city").val($(this).attr('data-city'));
-                $("#most-search").submit();
-            });
-            
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             })
+            $(".thumbnail-variant-4").on('click', function (e) {
+                $("#most-search").find('.alert-danger').text('');
+                $("#most-search").find('.alert').removeClass('alert-danger');
+                $(".city").val($(this).attr('data-city'));
+                e.preventDefault();
+                // return false;
+                var $this = $("#most-search");
+                var flightType = $this.find('[name="flight_type"]').val(),
+                        from = $this.find('[name="from"]').val(),
+                        to = $this.find('[name="to"]').val(),
+                        passengerClass = $this.find('[name="passenger_class"]').val(),
+                        departure = $this.find('[name="departure"]').val(),
+                        departureVal = new Date(departure).toJSON().slice(0, 10),
+                        returnVal = null,
+                        passengerAdult = $this.find('[name="passenger_adult"]').val(),
+                        passengerChild = $this.find('[name="passenger_child"]').val(),
+                        passengerInfant = $this.find('[name="passenger_infant"]').val(),
+                        actionUrl = $this.attr('action');
+               
+                        flightType = "oneway";
+                
+                var parameters = '/' + passengerClass + '/' + flightType + '/' + from + '/' + to + '/' + departureVal + '/' + returnVal + '/' + passengerAdult + '/' + passengerChild + '/' + passengerInfant + '/' + '0';
+                actionUrlFinal = actionUrl + parameters;
+                // console.log(actionUrl);
+                // console.log(actionUrlFinal);
+                 $.ajax({
+                     type: "GET",
+                     url: actionUrlFinal,
+                     dataType: "json",
+                     success: function (data) {
+                         console.log(data);
+                        location.href = 'flight-search-listing' + parameters;
+                     },
+                     error: function (xhr, status, error) {
+                          var res = $.parseJSON(xhr.responseText);
+                          if(!res.status){
+                            $("#most-search").find('.alert').addClass('alert-danger').text(res.message);
+                          }
+                         siyApp.ajaxInputErrorAmadeus(res, $("#most-search"));
+                     }
+                 });
+                 e.preventDefault();
+            });
+            
+           
             $(".amadeus-flight-search").on('submit', function (e) {
                 e.preventDefault();
                 // return false;
@@ -747,11 +787,11 @@
                              for(var i =0; i<res.errors.length; i++){
                                  html += '<span style="display:flex; color:red">'+res.errors[i].detail+'</span>'; 
                              }
-                             $(".toast-body").append(html);
-                             $(".toast").show();
+//                             $(".toast-body").append(html);
+//                             $(".toast").show();
                           }
                          $(".amadeus-flight-search").find('.submit-fm button').attr("disabled", false);
-                         siyApp.ajaxInputError(error, $(".amadeus-flight-search"));
+                         siyApp.ajaxInputErrorAmadeus(res, $(".amadeus-flight-search"));
                      }
                  });
                  e.preventDefault();
