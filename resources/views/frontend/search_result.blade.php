@@ -246,6 +246,10 @@
                                                     {{$flight['oneWayDetails']['stops']['total']}} stops
                                                     @endif
                                                     
+<<<<<<< HEAD
+=======
+                                                    @if(count($flight['oneWayDetails']['stops']) > 1)
+>>>>>>> 07ba73b9fa172508ef4a1a05e5fcccea425a737e
                                                     <div class="tooltip plane-change-tooltip" role="tooltip">
                                                         <div class="arrow"></div>
                                                         <div class="tooltip-inner">
@@ -263,6 +267,7 @@
                                                             @endif
                                                         </div>
                                                     </div>
+                                                    @endif
                                                 </div>
                                             </div>
                                             <div class="list-item-content-right">
@@ -301,13 +306,14 @@
                                                     {{$flight['returnDetails']['stops']['total']}} stops
                                                     @endif
                                                     
+                                                    @if(count($flight['oneWayDetails']['stops']) > 1)
                                                     <div class="tooltip plane-change-tooltip" role="tooltip">
                                                         <div class="arrow"></div>
-
                                                         <div class="tooltip-inner">
-                                                            <?php // dd(($flight['oneWayDetails']['stops'])); ?>
-                                                            @if(is_array($flight['returnDetails']['stops']))
-                                                            @foreach($flight['returnDetails']['stops'] as $key => $stop) 
+
+                                                            @if(is_array($flight['oneWayDetails']['stops']))
+                                                            {{count($flight['oneWayDetails']['stops']) - 1}} Plane change<br>
+                                                            @foreach($flight['oneWayDetails']['stops'] as $key => $stop) 
                                                             @if($key != 'total')
                                                             {{$key." ".$stop['iataCode']}} <br>
                                                             @if(isset($stop['terminal']))
@@ -318,6 +324,7 @@
                                                             @endif
                                                         </div>
                                                     </div>
+                                                    @endif
                                                 </div>
 
                                             </div>
