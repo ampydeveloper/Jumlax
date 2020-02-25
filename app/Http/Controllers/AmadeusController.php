@@ -238,8 +238,8 @@ class AmadeusController extends Controller {
                         $count = count($flight['itineraries'][0]['segments']);
                         if ($count == 1) {
                             $flights[$key]['oneWayDetails']['stops']['total'] = 0;
-                            $flights[$key]['oneWayDetails']['stops']['airport_data'] = AirportDetails::where('airport_code', $flight['itineraries'][0]['segments'][0]['departure']['iataCode'])->first();
-                            $flights[$key]['oneWayDetails']['stops']['airport_data'] = AirportDetails::where('airport_code', $flight['itineraries'][0]['segments'][0]['arrival']['iataCode'])->first();
+                            //$flights[$key]['oneWayDetails']['stops']['airport_data'] = AirportDetails::where('airport_code', $flight['itineraries'][0]['segments'][0]['departure']['iataCode'])->first();
+                            //$flights[$key]['oneWayDetails']['stops']['airport_data'] = AirportDetails::where('airport_code', $flight['itineraries'][0]['segments'][0]['arrival']['iataCode'])->first();
                             $flights[$key]['oneWayDetails']['departure'] = $flight['itineraries'][0]['segments'][0]['departure'];
                             $flights[$key]['oneWayDetails']['arrival'] = $flight['itineraries'][0]['segments'][0]['arrival'];
                             $flights[$key]['oneWayDetails']['carrierCode'] = $flight['itineraries'][0]['segments'][0]['carrierCode'];
@@ -292,15 +292,16 @@ class AmadeusController extends Controller {
                                     }
                                     if ($itinerarieReturnKey == 0) {
                                         $flights[$key]['returnDetails']['departure'] = $itinerarieReturn['departure'];
-                                         $flights[$key]['returnDetails']['departure']['airport_data'] = AirportDetails::where('airport_code', $itinerarieOneWay['arrival']['iataCode'])->first();
+                                         $flights[$key]['returnDetails']['departure']['airport_data'] = AirportDetails::where('airport_code', $itinerarieReturn['departure']['iataCode'])->first();
                                         $flights[$key]['returnDetails']['stops'][$itinerarieReturnKey + 1]['airport_data'] = AirportDetails::where('airport_code', $itinerarieReturn['departure']['iataCode'])->first();
                                         $flights[$key]['returnDetails']['carrierCode'] = $itinerarieReturn['carrierCode'];
                                         $flights[$key]['returnDetails']['number'] = $itinerarieReturn['number'];
                                         $flights[$key]['returnDetails']['stops'][$itinerarieReturnKey + 1] = $itinerarieReturn['arrival'];
                                         $flights[$key]['returnDetails']['stops'][$itinerarieReturnKey + 1]['airport_data'] = AirportDetails::where('airport_code', $itinerarieReturn['arrival']['iataCode'])->first();
+                                        $flights[$key]['returnDetails']['arrival']['airport_data'] = AirportDetails::where('airport_code', $itinerarieReturn['arrival']['iataCode'])->first();
                                     } elseif ($itinerarieReturnKey == $count - 1) {
                                         $flights[$key]['returnDetails']['arrival'] = $itinerarieReturn['arrival'];
-                                        $flights[$key]['returnDetails']['arrival']['airport_data'] = AirportDetails::where('airport_code', $itinerarieOneWay['departure']['iataCode'])->first();
+                                        $flights[$key]['returnDetails']['arrival']['airport_data'] = AirportDetails::where('airport_code', $itinerarieReturn['arrival']['iataCode'])->first();
                                     } else {
                                         $flights[$key]['returnDetails']['stops'][$itinerarieReturnKey + 1] = $itinerarieReturn['arrival'];
                                         $flights[$key]['returnDetails']['stops'][$itinerarieReturnKey + 1]['airport_data'] = AirportDetails::where('airport_code', $itinerarieReturn['arrival']['iataCode'])->first();

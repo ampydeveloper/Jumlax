@@ -228,7 +228,7 @@
                                         <div class="list-item-content">
                                             <div class="list-item-content-left">
                                                 <div class="text-bold text-base">{{ \Carbon\Carbon::parse($flight['oneWayDetails']['departure']['at'])->format('h:i') }}</div>
-                                                <span class="small d-block">{{ $flight['oneWayDetails']['departure']['iataCode'] }} </span>
+                                                <span class="small d-block">{{ $flight['oneWayDetails']['departure']['airport_data']['city_name'] }}&nbsp;&nbsp;({{ $flight['oneWayDetails']['departure']['iataCode'] }}) </span>
                                                 @if(isset($flight['oneWayDetails']['departure']['terminal']))
                                                 <span class="small d-block">Terminal {{ $flight['oneWayDetails']['departure']['terminal'] }} </span>
                                                 @endif
@@ -282,7 +282,7 @@
                                             ?>
                                             <div class="list-item-content-right">
                                                 <div class="text-bold text-base">{{ \Carbon\Carbon::parse($flight['oneWayDetails']['arrival']['at'])->format('H:i') }} <span style="color:red; font-size: 10px">+{{$diff->days}} DAY</span></div>
-                                                <span class="small d-block">{{ $flight['oneWayDetails']['arrival']['iataCode'] }} </span>
+                                                <span class="small d-block">{{ $flight['oneWayDetails']['arrival']['airport_data']['city_name'] }}&nbsp;&nbsp;({{ $flight['oneWayDetails']['arrival']['iataCode'] }})</span>
                                                 @if(isset($flight['oneWayDetails']['arrival']['terminal']))
                                                 <span class="small d-block">Terminal {{ $flight['oneWayDetails']['arrival']['terminal'] }} </span>
                                                 @endif
@@ -296,7 +296,7 @@
                                         <div class="list-item-content">
                                             <div class="list-item-content-left">
                                                 <div class="text-bold text-base">{{ \Carbon\Carbon::parse($flight['returnDetails']['departure']['at'])->format('H:i') }}</div>
-                                                <span class="small d-block">{{ $flight['returnDetails']['departure']['iataCode'] }} </span>
+                                                <span class="small d-block">{{ $flight['returnDetails']['departure']['airport_data']['city_name'] }}&nbsp;&nbsp;({{ $flight['returnDetails']['departure']['iataCode'] }}) </span>
                                                 @if(isset($flight['returnDetails']['departure']['terminal']))
                                                 <span class="small d-block">Terminal {{ $flight['returnDetails']['departure']['terminal'] }} </span>
                                                 @endif
@@ -344,7 +344,7 @@
                                             </div>
                                             <div class="list-item-content-right">
                                                 <div class="text-bold text-base">{{ \Carbon\Carbon::parse($flight['returnDetails']['arrival']['at'])->format('H:i') }} </div>
-                                                <span class="small d-block">{{ $flight['returnDetails']['arrival']['iataCode'] }} </span>
+                                                <span class="small d-block">{{ $flight['returnDetails']['arrival']['airport_data']['city_name'] }}&nbsp;&nbsp;({{ $flight['returnDetails']['arrival']['iataCode'] }})</span>
                                                 @if(isset($flight['returnDetails']['arrival']['terminal']))
                                                 <span class="small d-block">Terminal {{ $flight['returnDetails']['arrival']['terminal'] }} </span>
                                                 @endif
