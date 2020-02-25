@@ -425,6 +425,14 @@ dl {
     .plane-change-tooltip {
         opacity: 1;
     }
+} 
+.tooltip-inner {
+    max-width: 260px !important;
+    padding: 0.25rem 0.5rem;
+    color: #000;
+    text-align: center;
+    background-color: #f3f4f7;
+    border-radius: 0.25rem;
 }
 
 @media(min-width:768px) {
