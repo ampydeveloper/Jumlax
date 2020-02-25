@@ -38,6 +38,8 @@
                 </div><!--form-group-->
 
                 <input type="submit" class="button button-primary button-block button-sm" value="login" >
+                <br>
+                Don't have a account ? <a href="/register">signup here</a>
 
                 {{ html()->form()->close() }}
             </div>

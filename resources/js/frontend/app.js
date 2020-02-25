@@ -70,11 +70,56 @@ jQuery('document').ready(function ($) {
                     } else if (i == 'interest') {
                         formSel.find('[name="' + i + '[]"]').parents('.interest-parent').append('<div class="invalid-feedback">' + textValue + '</div>');
                     } else {
-                        elementSel.addClass('is-invalid').parent().append('<div class="invalid-feedback">' + textValue + '</div>');
+                        formSel.find('.alert').addClass('alert-danger').append('<div class="invalid-feedback">' + textValue + '</div>');
                     }
                 });
             }
         }
     };
-});
+    
+    siyApp.ajaxInputErrorAmadeus = function (error, formSel) {
+        if (error.status == 401) {
+            location.reload();
+        }
+        
+        //removing all error classes
+        formSel.find('.alert-danger').text('');
+        formSel.find('.alert-danger').removeClass('alert-danger');
+        formSel.find('.is-invalid').removeClass('is-invalid');
+        formSel.find('.invalid-feedback').remove();
+        if ($.isEmptyObject(error)) {
+            Swal.fire({
+                title: 'Oops!!',
+                text: 'Something went wrong. Please try again.',
+                type: 'error',
+                customClass: 'sweat-alert-confirm'
+            });
+        } else {
+
+            if (!$.isEmptyObject(error)) {
+                var responseText = error;
+                $.each(responseText.errors, function (i, v) {
+                    if ($.isArray(v)) {
+                        var textValue = '';
+                        $.each(v, function (i, value) {
+                            textValue = textValue + ' ' + value;
+                        });
+                    } else {
+                        var textValue = v.detail;
+                    }
+                    console.log(textValue);
+                    var elementSel = formSel.find('[name="' + i + '"]');
+                    if (elementSel.attr('type') == "radio") {
+                        elementSel.addClass('is-invalid').parents('.radio-ul').append('<div class="invalid-feedback">' + textValue + '</div>');
+                    } else if (i == 'interest') {
+                        formSel.find('[name="' + i + '[]"]').parents('.interest-parent').append('<div class="invalid-feedback">' + textValue + '</div>');
+                    } else {
+                        formSel.find('.alert').addClass('alert-danger').text(textValue);
+                    }
+                });
+            }
+        }
+    };
+    
+}); 
     

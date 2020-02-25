@@ -132,6 +132,7 @@
                     @foreach($paginatedItems as $key=>$flight)
                     <?php
 //                    dump($key);
+                  
                     ?>
                     <ul class="list-tickets">
                         <li class="list-item">
@@ -227,14 +228,17 @@
                                         <div class="list-item-content">
                                             <div class="list-item-content-left">
                                                 <div class="text-bold text-base">{{ \Carbon\Carbon::parse($flight['oneWayDetails']['departure']['at'])->format('h:i') }}</div>
-                                                <span class="small d-block">{{ $flight['oneWayDetails']['departure']['iataCode'] }} </span>
+                                                <span class="small d-block">{{ $flight['oneWayDetails']['departure']['airport_data']['city_name'] }}&nbsp;&nbsp;({{ $flight['oneWayDetails']['departure']['iataCode'] }}) </span>
                                                 @if(isset($flight['oneWayDetails']['departure']['terminal']))
                                                 <span class="small d-block">Terminal {{ $flight['oneWayDetails']['departure']['terminal'] }} </span>
                                                 @endif
                                             </div>
                                             <div class="list-item-content-line-wrapper small plane-change-topen" data-toggle="tooltip" data-html="true" data-placement="top">
                                                 <div class="list-item-content-line-top"> 
-                                                    {{$flight['oneWayDetails']['duration']}}
+                                                    <?php $resStr = str_replace('H', 'hrs', $flight['oneWayDetails']['duration']); 
+                                                       $resStr = str_replace('M', 'mins', $resStr);
+                                                    ?>
+                                                    {{$resStr}}
                                                 </div>
                                                 <div class="list-item-content-line"></div>
                                                 <div class="list-item-content-line-bottom text-info-dr">
@@ -246,6 +250,7 @@
                                                     {{$flight['oneWayDetails']['stops']['total']}} stops
                                                     @endif
                                                     
+
                                                     @if(count($flight['oneWayDetails']['stops']) > 1)
                                                     <div class="tooltip plane-change-tooltip" role="tooltip">
                                                         <div class="arrow"></div>
@@ -255,7 +260,7 @@
                                                             {{count($flight['oneWayDetails']['stops']) - 1}} Plane change<br>
                                                             @foreach($flight['oneWayDetails']['stops'] as $key => $stop) 
                                                             @if($key != 'total')
-                                                            {{$key." ".$stop['iataCode']}} <br>
+                                                            {{$key.". ".$stop['airport_data']['airport_name'] . ", " .$stop['airport_data']['city_name'] ." (".    $stop['iataCode'] .")"}} <br>
                                                             @if(isset($stop['terminal']))
                                                             {{'Terminal '.$stop['terminal']}} <br>
                                                             @endif
@@ -267,9 +272,17 @@
                                                     @endif
                                                 </div>
                                             </div>
+                                            <?php 
+                                            $arrival = \Carbon\Carbon::parse($flight['oneWayDetails']['arrival']['at'])->format('m/d/y');
+                                             $departure = \Carbon\Carbon::parse($flight['oneWayDetails']['departure']['at'])->format('m/d/y');
+                                             
+                                                $date1 = new DateTime($arrival);
+                                                $date2 = new DateTime($departure);
+                                                $diff = $date1->diff($date2);
+                                            ?>
                                             <div class="list-item-content-right">
-                                                <div class="text-bold text-base">{{ \Carbon\Carbon::parse($flight['oneWayDetails']['arrival']['at'])->format('h:i') }} </div>
-                                                <span class="small d-block">{{ $flight['oneWayDetails']['arrival']['iataCode'] }} </span>
+                                                <div class="text-bold text-base">{{ \Carbon\Carbon::parse($flight['oneWayDetails']['arrival']['at'])->format('H:i') }} <span style="color:red; font-size: 10px">+{{$diff->days}} DAY</span></div>
+                                                <span class="small d-block">{{ $flight['oneWayDetails']['arrival']['airport_data']['city_name'] }}&nbsp;&nbsp;({{ $flight['oneWayDetails']['arrival']['iataCode'] }})</span>
                                                 @if(isset($flight['oneWayDetails']['arrival']['terminal']))
                                                 <span class="small d-block">Terminal {{ $flight['oneWayDetails']['arrival']['terminal'] }} </span>
                                                 @endif
@@ -282,8 +295,8 @@
                                     <div class="list-item-top">
                                         <div class="list-item-content">
                                             <div class="list-item-content-left">
-                                                <div class="text-bold text-base">{{ \Carbon\Carbon::parse($flight['returnDetails']['departure']['at'])->format('h:i') }}</div>
-                                                <span class="small d-block">{{ $flight['returnDetails']['departure']['iataCode'] }} </span>
+                                                <div class="text-bold text-base">{{ \Carbon\Carbon::parse($flight['returnDetails']['departure']['at'])->format('H:i') }}</div>
+                                                <span class="small d-block">{{ $flight['returnDetails']['departure']['airport_data']['city_name'] }}&nbsp;&nbsp;({{ $flight['returnDetails']['departure']['iataCode'] }}) </span>
                                                 @if(isset($flight['returnDetails']['departure']['terminal']))
                                                 <span class="small d-block">Terminal {{ $flight['returnDetails']['departure']['terminal'] }} </span>
                                                 @endif
@@ -291,7 +304,11 @@
 
                                             <div class="list-item-content-line-wrapper small plane-change-topen" data-toggle="tooltip" data-html="true" data-placement="top">
                                                 <div class="list-item-content-line-top">
-                                                    {{$flight['returnDetails']['duration']}}
+                                                    
+                                                     <?php $resStr = str_replace('H', 'hrs', $flight['returnDetails']['duration']); 
+                                                       $resStr = str_replace('M', 'mins', $resStr);
+                                                    ?>
+                                                    {{$resStr}}
                                                 </div>
                                                 <div class="list-item-content-line"></div>
                                                 <div class="list-item-content-line-bottom text-info-dr">
@@ -312,7 +329,7 @@
                                                             {{count($flight['oneWayDetails']['stops']) - 1}} Plane change<br>
                                                             @foreach($flight['oneWayDetails']['stops'] as $key => $stop) 
                                                             @if($key != 'total')
-                                                            {{$key." ".$stop['iataCode']}} <br>
+                                                            {{$key.". ".$stop['airport_data']['airport_name'] . ", " .$stop['airport_data']['city_name'] ." (".    $stop['iataCode'] .")"}} <br>
                                                             @if(isset($stop['terminal']))
                                                             {{'Terminal '.$stop['terminal']}} <br>
                                                             @endif
@@ -326,8 +343,8 @@
 
                                             </div>
                                             <div class="list-item-content-right">
-                                                <div class="text-bold text-base">{{ \Carbon\Carbon::parse($flight['returnDetails']['arrival']['at'])->format('h:i') }} </div>
-                                                <span class="small d-block">{{ $flight['returnDetails']['arrival']['iataCode'] }} </span>
+                                                <div class="text-bold text-base">{{ \Carbon\Carbon::parse($flight['returnDetails']['arrival']['at'])->format('H:i') }} </div>
+                                                <span class="small d-block">{{ $flight['returnDetails']['arrival']['airport_data']['city_name'] }}&nbsp;&nbsp;({{ $flight['returnDetails']['arrival']['iataCode'] }})</span>
                                                 @if(isset($flight['returnDetails']['arrival']['terminal']))
                                                 <span class="small d-block">Terminal {{ $flight['returnDetails']['arrival']['terminal'] }} </span>
                                                 @endif
