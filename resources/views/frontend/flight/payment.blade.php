@@ -183,10 +183,24 @@
 				<div class="option_tabs clearfix">
 
 					<div class="payment_widget clearfix">
+                                            
+                                            @if(session()->has('success'))
+                                                <div class="alert alert-success">
+                                                    {{ session()->get('success') }}
+                                                </div>
+                                            @endif
 
+                                            @if(session()->has('error'))
+                                                <div class="alert alert-danger">
+                                                    {{ session()->get('error') }}
+                                                </div>
+                                            @endif
+                                            
 						<form name="formID" id="formID"
-							action="https://m-securepay.makemytrip.com/common-payment-web-iframe/submitCheckoutForm.pymt?ckId=453596754489409"
+							action="{{ route('frontend.payfull') }}"
 							method="post" target="_parent" autocomplete="off">
+                                                    
+                                                    {!! csrf_field() !!}
 
 							<div id="paymentWidget">
 								<input type="text" style="display:none;" name="currentSelectedTab"
@@ -244,11 +258,45 @@
 
 										<!-- Inner-Container -->
 										<div class="inner_container clearfix">
-											<!-- Couponapplied-Info -->
-											<!-- <p class="coupon_appliedinfo lato-regular append_bottom25 clearfix"> You have applied Coupon Code APPFEST, please enter an SBI credit card number starting with 3214 23XX XXXX XXXX to avail the offer. <a href="#">Change Date</a> </p> -->
-											<!-- /Couponapplied-Info -->
+											<div class="input_section append_bottom20">
 
-											<!-- Input-Section -->
+												<p class="clearfix input_label lato-regular append_bottom8">
+													<label for="cardnumber">CUSTOMER DETAILS</label>
+												</p>
+												<p class="clearfix card_type_input">
+                                                                                                    <input type="text" class="form-input form-control-last-child return"
+														name="customer_firstname"
+                                                                                                                placeholder="First name" required="">
+												</p>
+                                                                                                @error('customer_firstname')
+                                                                                                        <div class="alert alert-danger">{{ $message }}</div>
+                                                                                                    @enderror
+                                                                                                <p class="clearfix card_type_input">
+                                                                                                    <input type="text" class="form-input form-control-last-child return"
+														name="customer_lastname"
+                                                                                                                placeholder="Last name" required="">
+												</p>
+                                                                                                @error('customer_lastname')
+                                                                                                        <div class="alert alert-danger">{{ $message }}</div>
+                                                                                                    @enderror
+                                                                                                <p class="clearfix card_type_input">
+                                                                                                    <input type="text" class="form-input form-control-last-child return"
+														name="customer_email"
+														placeholder="Email" required="">
+												</p>
+                                                                                                @error('customer_email')
+                                                                                                        <div class="alert alert-danger">{{ $message }}</div>
+                                                                                                    @enderror
+                                                                                                <p class="clearfix card_type_input">
+                                                                                                    <input type="text" class="form-input form-control-last-child return"
+														name="customer_phone"
+														placeholder="Phone number" required="">
+												</p>
+                                                                                                @error('customer_phone')
+                                                                                                        <div class="alert alert-danger">{{ $message }}</div>
+                                                                                                    @enderror
+											</div>
+                                                                                    
 											<div class="input_section append_bottom20">
 
 												<p class="clearfix input_label lato-regular append_bottom8">
@@ -257,12 +305,13 @@
 												<p class="clearfix card_type_input">
 													<input type="tel" pattern="[0-9]*"
 														class="form-input form-control-last-child return"
-														id="PAYMENT_cardNumber" name="PAYMENT_cardNumber"
+														id="PAYMENT_cardNumber" name="card_number"
 														autocomplete="off" maxlength="19" tabindex="7"
 														placeholder="Enter card number here" value="">
-
 												</p>
-
+                                                                                                @error('card_number')
+                                                                                                        <div class="alert alert-danger">{{ $message }}</div>
+                                                                                                    @enderror
 											</div>
 
 											<!-- Input-Section -->
@@ -274,14 +323,11 @@
 													<input type="text"
 														class="form-input form-control-last-child return"
 														placeholder="Enter name here" id="PAYMENT_nameOnCard"
-														maxlength="40" tabindex="8" name="PAYMENT_nameOnCard" value="">
+														maxlength="40" tabindex="8" name="card_holder_name" value="">
 												</p>
-												<p id="PAYMENT_nameOnCard_err"
-													class="PAYMENT_nameOnCard_err cpay_removePrompt">
-													<span class="make_block error_container clearfix">
-														<span class="error_icon pull-left"></span>
-														<span class="error_text lato-regular pull-left"></span>
-													</span></p>
+												@error('card_holder_name')
+                                                                                                        <div class="alert alert-danger">{{ $message }}</div>
+                                                                                                    @enderror
 											</div>
 
 											<div class="select_section clearfix append_bottom8" id="hiddenMaestroDiv">
@@ -293,7 +339,7 @@
                                                                                                     <span class="make_block input_label append_bottom8">&nbsp;</span>
 													<select
 														class="form-input select2-hidden-accessible"
-														id="PAYMENT_expiryMonth" name="PAYMENT_expiryMonth"
+														id="PAYMENT_expiryMonth" name="card_month"
 														tabindex="9">
 														<option value="" selected="selected">Month</option>
 
@@ -333,7 +379,7 @@
                                                                                                         
 													<select
 														class="form-input select2-hidden-accessible"
-														id="PAYMENT_expiryYear" tabindex="10" name="PAYMENT_expiryYear">
+														id="cc_year" tabindex="10" name="card_year">
 														<option value="" selected="selected">Year</option>
 
 														<option value="2020">2020</option>
@@ -423,7 +469,7 @@
 														<input type="password" pattern="[0-9]*"
 															class="form-input form-control validate[funcCall[payments.cardSection.cvv_alert]]"
 															placeholder="CVV" id="PAYMENT_cvv" tabindex="11"
-															name="PAYMENT_cvv" maxlength="3">
+															name="card_cvc" maxlength="3">
 													</span>
 													<!-- /Cvv -->
 											
@@ -451,6 +497,18 @@
 													<!-- /Cvv-Additional-info -->
                                                                                                 </div>
                                                                                                 </div>
+                                                                                        
+                                                                                        @if ($errors->any())
+                                                                                            <div class="alert alert-danger">
+                                                                                                <ul>
+                                                                                                    @foreach ($errors->all() as $error)
+                                                                                                    @if($error == 'card_month' || $error == 'card_year' || $error == 'card_cvc')
+                                                                                                        <li>{{ $error }}</li>
+                                                                                                    @endif    
+                                                                                                    @endforeach
+                                                                                                </ul>
+                                                                                            </div>
+                                                                                        @endif
 
 										</div>
 
@@ -473,11 +531,13 @@
 
 										</div>
 										<!-- /Payment-Amount-Info -->
+                                                                                
+                                                                                <input type="hidden" value="{{ $price['grandTotal'] }}" name="total" />
 
 										<!-- Payment-Button-Info -->
 										<div class="pull-right" id="make_payment_section" style="display: block;">
 											<p class="clearfix append_bottom6">
-												<button type="button" tabindex="19" class="button button-sm ladda-button"
+                                                                                            <button type="submit" tabindex="19" class="button button-sm ladda-button"
                                                                                                         id="widgetPayBtn" style="background:#ed1d2d">
 													<!-- <span class="pull-left lock_icon">&nbsp;</span> --> <span
 														class="pull-left lock_txt lato-bold">Make Payment </span>

@@ -191,7 +191,6 @@ table {
 .hdfc,
 .axis,
 .hsbc,
-.state,
 .cbiban,
 .sbi,
 .icici,
@@ -274,7 +273,6 @@ table {
 }
 
 .payment_container {
-    width: 1200px;
     margin: 0 auto;
     padding-top: 9px;
     padding-bottom: 0px
@@ -386,7 +384,6 @@ table {
     padding: 0px;
     list-style-type: none;
     background: #f9f9f9;
-    min-height: 495px
 }
 
 @media screen and (max-width: 768px) {
@@ -490,7 +487,6 @@ table {
     background: #fff;
     padding: 20px 46px 30px;
     width: 526px;
-    min-height: 734px;
     border-left: 1px solid #e9e9e9
 }
 
