@@ -132,7 +132,7 @@
                     @foreach($paginatedItems as $key=>$flight)
                     <?php
 //                    dump($key);
-                  
+//                  dd($flight);
                     ?>
                     <ul class="list-tickets">
                         <li class="list-item">

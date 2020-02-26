@@ -26,7 +26,7 @@ Route::post('/paymentDone', [HomeController::class, 'paymentDone'])->name('payme
 Route::post('/paymentCancelled', [HomeController::class, 'paymentCancelled'])->name('paymentCancelled'); 
 Route::post('/process_payment', [HomeController::class, 'process_payment'])->name('process_payment');
 Route::get('/booked', [HomeController::class, 'booked'])->name('booked');
-
+Route::post('/payfull', [HomeController::class, 'payfull'])->name('payfull');
 
 Route::post('/chartereview', [CharterPlaneController::class, 'chartereview'])->name('chartereview');
 Route::get('/chartedetails', [CharterPlaneController::class, 'chartedetails'])->name('chartedetails');
