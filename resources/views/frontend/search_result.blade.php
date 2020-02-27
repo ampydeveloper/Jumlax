@@ -241,7 +241,28 @@
                                                     {{$resStr}}
                                                 </div>
                                                 <div class="list-item-content-line"></div>
-                                                <div class="list-item-content-line-bottom text-info-dr">
+                                                <?php
+                                                if(count($flight['oneWayDetails']['stops']) > 1) {
+                                                    if(is_array($flight['oneWayDetails']['stops'])) {
+                                                        $planeChange = (count($flight['oneWayDetails']['stops']) - 1). ' Plane change';
+                                                                foreach($flight['oneWayDetails']['stops'] as $key => $stop) {
+                                                                    if($key != 'total') {
+                                                                        $secondValue = $key.". ".$stop['airport_data']['airport_name'] . ", " .$stop['airport_data']['city_name'] ." (".    $stop['iataCode'] .")";
+                                                                        $planeChange .= $secondValue != '' ? ' '.$secondValue : '';
+                                                                    }
+                                                                    if(isset($stop['terminal'])) {
+                                                                        $terminal = 'Terminal '.$stop['terminal'];
+                                                                    } else { $terminal = ''; }
+
+                                                                    $planeChange .= $terminal != '' ? ' '.$terminal : '';
+                                                                }
+                                                    }
+                                                } else { $planeChange = 'No Stop'; }
+                                                            ?>
+                                                
+                                                <div class="list-item-content-line-bottom text-info-dr link"
+                                                     draggable="false"
+                                                     data-tooltip="{{$planeChange}}">
                                                     @if($flight['oneWayDetails']['stops']['total'] == 0)
                                                     Non-stop
                                                     @elseif($flight['oneWayDetails']['stops']['total'] == 1)
@@ -252,7 +273,7 @@
                                                     
 
                                                     @if(count($flight['oneWayDetails']['stops']) > 1)
-                                                    <div class="tooltip plane-change-tooltip" role="tooltip">
+<!--                                                    <div class="tooltip plane-change-tooltip" role="tooltip">
                                                         <div class="arrow"></div>
                                                         <div class="tooltip-inner">
 
@@ -268,7 +289,7 @@
                                                             @endforeach
                                                             @endif
                                                         </div>
-                                                    </div>
+                                                    </div>-->
                                                     @endif
                                                 </div>
                                             </div>
@@ -311,7 +332,29 @@
                                                     {{$resStr}}
                                                 </div>
                                                 <div class="list-item-content-line"></div>
-                                                <div class="list-item-content-line-bottom text-info-dr">
+                                                
+                                                <?php
+                                                if(count($flight['oneWayDetails']['stops']) > 1) {
+                                                    if(is_array($flight['oneWayDetails']['stops'])) {
+                                                        $planeChange = (count($flight['oneWayDetails']['stops']) - 1). ' Plane change';
+                                                                foreach($flight['oneWayDetails']['stops'] as $key => $stop) {
+                                                                    if($key != 'total') {
+                                                                        $secondValue = $key.". ".$stop['airport_data']['airport_name'] . ", " .$stop['airport_data']['city_name'] ." (".    $stop['iataCode'] .")";
+                                                                        $planeChange .= $secondValue != '' ? ' '.$secondValue : '';
+                                                                    }
+                                                                    if(isset($stop['terminal'])) {
+                                                                        $terminal = 'Terminal '.$stop['terminal'];
+                                                                    } else { $terminal = ''; }
+
+                                                                    $planeChange .= $terminal != '' ? ' '.$terminal : '';
+                                                                }
+                                                    }
+                                                } else { $planeChange = 'No Stop'; }
+                                                            ?>
+                                                
+                                                <div class="list-item-content-line-bottom text-info-dr link"
+                                                     draggable="false"
+                                                     data-tooltip="{{$planeChange}}" >
                                                     @if($flight['returnDetails']['stops']['total'] == 0)
                                                     Non-stop
                                                     @elseif($flight['returnDetails']['stops']['total'] == 1)
@@ -321,7 +364,7 @@
                                                     @endif
                                                     
                                                     @if(count($flight['oneWayDetails']['stops']) > 1)
-                                                    <div class="tooltip plane-change-tooltip" role="tooltip">
+<!--                                                    <div class="tooltip plane-change-tooltip" role="tooltip">
                                                         <div class="arrow"></div>
                                                         <div class="tooltip-inner">
 
@@ -337,7 +380,7 @@
                                                             @endforeach
                                                             @endif
                                                         </div>
-                                                    </div>
+                                                    </div>-->
                                                     @endif
                                                 </div>
 
