@@ -57,9 +57,11 @@ Route::get('/flight-search-listing/{passenger_class}/{flight_type}/{from}/{to}/{
 
 Route::post('/most-search', 'AmadeusController@mostTraveledSearch');
 
+Route::post('/most-search', 'AmadeusController@mostTraveledSearch');
+
 //Route::get('/contact', 'AmadeusController@getContact');
 
-Route::post('/charter-search', 'CharterPlaneController@getCharterListing');
+//Route::get('/payfull', 'AmadeusController@payfull');
 
 //Route::post('/fake', 'AmadeusController@getPDF');
 

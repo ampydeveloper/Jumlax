@@ -495,5 +495,83 @@ class HomeController extends Controller {
     public function booked(Request $request) {
         return view('frontend.flight.booked');
     }
+    
+    
+    public function payfull(Request $request){
+        
+//        currency: required
+//        Currency can be TRY/USD/EUR/GBP
+        $request->validate([
+            'customer_firstname' => 'required',
+            'customer_lastname' => 'required',
+            'customer_email' => 'required',
+            'customer_phone' => 'required',
+            'card_holder_name' => 'required',
+            'card_number' => 'required',
+            'card_month' => 'required',
+            'card_month' => 'required',
+            'card_cvc' => 'required',
+            'total' => 'required',
+        ]);
+            
+        $api_url = 'https://newdirection.payfull.com/integration/api/v1';
+        $merchantPassword = 'ecologest12#$';
+        $params = array(
+        "merchant"        => 'ecologest@gmail',
+        "type"            => 'Sale',
+        "total"           => $request->total,
+        "cc_name"         => $request->card_holder_name,
+        "cc_number"       => $request->card_number,
+        "cc_month"        => $request->card_month,
+        "cc_year"         => $request->card_year,
+        "cc_cvc"          => $request->card_cvc,
+
+        "currency"        => 'TRY',
+        "installments"    => 1,
+        "language"        => 'en',
+        "client_ip"       => $request->ip(),
+        "payment_title"   => 'Flight booking',
+
+        "customer_firstname" => $request->customer_firstname,
+        "customer_lastname"  => $request->customer_lastname,
+        "customer_email"     => $request->customer_email,
+        "customer_phone"     => $request->customer_phone,
+        "passive_data"  => 'Flight booked by jumlax',
+        );
+
+
+        ksort($params);
+        $hashString = "";
+        foreach ($params as $key=>$val) {
+            $l = mb_strlen($val);
+            if($l) $hashString .= $l . $val;
+        }
+
+        $params["hash"] = hash_hmac("sha256", $hashString, $merchantPassword);
+
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $api_url);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        curl_setopt($ch, CURLOPT_TIMEOUT, 60);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($params));
+        $response = curl_exec($ch);
+
+        $curlerrcode = curl_errno($ch);
+        $curlerr = curl_error($ch);
+       
+        $res = json_decode($response, true);
+        if($res['status']){
+           return redirect()->back()->with('success', $res['ErrorMSG']);
+        }else{
+            return redirect()->back()->with('error', $res['ErrorMSG']);
+        }
+                    
+    }
 
 }
