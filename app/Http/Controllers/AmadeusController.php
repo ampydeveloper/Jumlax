@@ -278,9 +278,9 @@ class AmadeusController extends Controller {
                             if ($count == 1) {
                                 $flights[$key]['returnDetails']['stops'] = 0;
                                 $flights[$key]['returnDetails']['departure'] = $flight['itineraries'][1]['segments'][0]['departure'];
-                                $flights[$key]['returnDetails']['stops']['airport_data'] = AirportDetails::where('airport_code', $flight['itineraries'][1]['segments'][0]['departure']['iataCode'])->first();
+                                $flights[$key]['returnDetails']['departure']['airport_data'] = AirportDetails::where('airport_code', $flight['itineraries'][1]['segments'][0]['departure']['iataCode'])->first();
                                 $flights[$key]['returnDetails']['arrival'] = $flight['itineraries'][1]['segments'][0]['arrival'];
-                                $flights[$key]['returnDetails']['stops']['airport_data'] = AirportDetails::where('airport_code', $flight['itineraries'][1]['segments'][0]['arrival']['iataCode'])->first();
+                                $flights[$key]['returnDetails']['arrival']['airport_data'] = AirportDetails::where('airport_code', $flight['itineraries'][1]['segments'][0]['arrival']['iataCode'])->first();
                                 $flights[$key]['returnDetails']['carrierCode'] = $flight['itineraries'][1]['segments'][0]['carrierCode'];
                                 $flights[$key]['returnDetails']['number'] = $flight['itineraries'][1]['segments'][0]['number'];
                             } else {
