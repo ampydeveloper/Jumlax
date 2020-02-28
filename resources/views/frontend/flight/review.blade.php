@@ -99,7 +99,8 @@
                                     @foreach($airports as $value)
 
                                     @if($value->airport_code == $val['departure']['iataCode'])
-                                    {{$value->airport_name}}
+                                    {{$value->airport_name}},
+                                    {{$value->city_name}}
                                     @break
                                     @endif
                                     @endforeach
@@ -110,8 +111,10 @@
                             <div class="col-sm-3 all-time">
                                 <?php
                                 $explode1 = explode('PT', $val['duration']);
+                                $resStr = str_replace('H', 'hrs', $explode1[1]);
+                                $resStr = str_replace('M', 'mins', $resStr);
                                 ?>
-                                {{$explode1[1]}}
+                                {{$resStr}}
                                 <hr />
                             </div>
                             <div class="col-sm-3 destins">
@@ -122,7 +125,8 @@
                                     @if($airports)
                                     @foreach($airports as $values)
                                     @if($values->airport_code == $val['arrival']['iataCode'])
-                                    {{$values->airport_name}}
+                                    {{$values->airport_name}},
+                                    {{$value->city_name}}
                                     @break
                                     @endif
                                     @endforeach

@@ -353,7 +353,7 @@ class AmadeusController extends Controller {
         $data = Session::get('amadeus_result_data');
         
         if(!$data){
-            $makeRequest = $this->getFlightListing($passenger_class, $flight_type, $from, $to, $departure, $return = null, $passenger_adult = 1, $passenger_child = 0, $passenger_infant = 0, $popular_destination);
+            $makeRequest = $this->getFlightListing($passenger_class, $flight_type, $from, $to, $departure, $return, $passenger_adult = 1, $passenger_child = 0, $passenger_infant = 0, $popular_destination);
             $data = json_decode(json_encode($makeRequest), true)['original']['data'];
         }
 
