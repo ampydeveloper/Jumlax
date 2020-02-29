@@ -55,8 +55,10 @@
                         foreach ($seg['segments'] as $valCal) {
                             $totalNumberOfStops = $totalNumberOfStops + $valCal['numberOfStops'];
                         }
-                        if ($totalNumberOfStops == 0) {
+                        if ($segment_count == 0) {
                             $totalNumberOfStops = 'Non Stop';
+                        } else {
+                            $totalNumberOfStops = $segment_count.' Stop';
                         }
                         $flight_date = $seg['segments'][0]['departure']['at'];
                         ?>
@@ -82,7 +84,8 @@
                             </ul>
                         </span>
                     </div>
-                    @foreach($seg['segments'] as $val)
+                    
+                    @foreach($seg['segments'] as $key2 => $val)
                     <div class="content">
                         <div class="row">
                             <div class="col-sm-3 plane">
@@ -116,6 +119,15 @@
                                 ?>
                                 {{$resStr}}
                                 <hr />
+                                @if($key == 0)
+                                    @if(isset($oneSide[$key2]))
+                                        {{$oneSide[$key2]}}
+                                    @endif
+                                @else
+                                    @if(isset($returnSide[$key2]))
+                                        {{$returnSide[$key2]}}
+                                    @endif
+                                @endif    
                             </div>
                             <div class="col-sm-3 destins">
                                 <span class="time">{{ \Carbon\Carbon::parse($val['arrival']['at'])->format('h:i') }}</span>

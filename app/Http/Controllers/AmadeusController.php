@@ -13,6 +13,7 @@ use Session;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
 
 class AmadeusController extends Controller {
     /*
@@ -247,7 +248,20 @@ class AmadeusController extends Controller {
                         } else {
                             $flights[$key]['oneWayDetails']['stops']['total'] = $count - 1;
                             $carrierCode = [];
+                            $totalSeconds = 0;
                             foreach ($flight['itineraries'][0]['segments'] as $itinerarieKey => $itinerarieOneWay) {
+                                
+                                if($itinerarieKey == 0) {
+                                    $arrival = Carbon::parse($itinerarieOneWay['arrival']['at']);
+                                } else if($itinerarieKey != 0) {
+                                    $depature = Carbon::parse($itinerarieOneWay['departure']['at']);
+                                    $diffInSeconds = $arrival->diffInSeconds($depature);
+                                    $arrival = Carbon::parse($itinerarieOneWay['arrival']['at']);
+                                    $totalSeconds = $totalSeconds + $diffInSeconds;
+                                    
+                                    $flights[$key]['oneWayDetails']['stops'][$itinerarieKey]['layover'] = gmdate('H:i:s', $totalSeconds);
+                                }
+                                
                                 if (!in_array($itinerarieOneWay['carrierCode'], $carrierCode)) {
                                     $carrierCode[] = $itinerarieOneWay['carrierCode'];
                                 }
@@ -258,7 +272,7 @@ class AmadeusController extends Controller {
                                     $flights[$key]['oneWayDetails']['carrierCode'] = $itinerarieOneWay['carrierCode'];
                                     $flights[$key]['oneWayDetails']['number'] = $itinerarieOneWay['number'];
                                     $flights[$key]['oneWayDetails']['stops'][$itinerarieKey + 1] = $itinerarieOneWay['arrival'];
-                                    $flights[$key]['oneWayDetails']['stops'][$itinerarieKey + 1]['airport_data'] = AirportDetails::where('airport_code', $itinerarieOneWay['arrival']['iataCode'])->first();
+                                       $flights[$key]['oneWayDetails']['stops'][$itinerarieKey + 1]['airport_data'] = AirportDetails::where('airport_code', $itinerarieOneWay['arrival']['iataCode'])->first();
                                 } elseif ($itinerarieKey == $count - 1) {
                                     $flights[$key]['oneWayDetails']['arrival'] = $itinerarieOneWay['arrival'];
                                     $flights[$key]['oneWayDetails']['arrival']['airport_data'] = AirportDetails::where('airport_code', $itinerarieOneWay['arrival']['iataCode'])->first();
@@ -267,6 +281,7 @@ class AmadeusController extends Controller {
                                     $flights[$key]['oneWayDetails']['stops'][$itinerarieKey + 1]['airport_data'] = AirportDetails::where('airport_code', $itinerarieOneWay['arrival']['iataCode'])->first();
                                 }
                             }
+                            
                             $flights[$key]['carrierCode'] = $carrierCode;
                             unset($carrierCode);
                         }
@@ -286,7 +301,19 @@ class AmadeusController extends Controller {
                             } else {
                                 $flights[$key]['returnDetails']['stops']['total'] = $count - 1;
                                 $carrierCode = [];
+                                $totalSeconds2 = 0;
                                 foreach ($flight['itineraries'][1]['segments'] as $itinerarieReturnKey => $itinerarieReturn) {
+                                    if($itinerarieReturnKey == 0) {
+                                        $arrival2 = Carbon::parse($itinerarieReturn['arrival']['at']);
+                                    } else if($itinerarieReturnKey != 0) {
+                                        $depature2 = Carbon::parse($itinerarieReturn['departure']['at']);
+                                        $diffInSeconds2 = $arrival2->diffInSeconds($depature2);
+                                        $arrival2 = Carbon::parse($itinerarieReturn['arrival']['at']);
+                                        $totalSeconds2 = $totalSeconds2 + $diffInSeconds2;
+
+                                        $flights[$key]['returnDetails']['stops'][$itinerarieReturnKey]['layover'] = gmdate('H:i:s', $totalSeconds2);
+                                    }
+                                
                                     if (!in_array($itinerarieReturn['carrierCode'], $carrierCode)) {
                                         $carrierCode[] = $itinerarieReturn['carrierCode'];
                                     }
