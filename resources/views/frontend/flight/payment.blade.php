@@ -220,7 +220,7 @@
 									</li>
 
 									<li id="NB_tab">
-										<a href="javascript:" rel="NB" class="clearfix" id="NB">
+										<a href="javascript:" id="process_payment" rel="NB" class="clearfix">
 											<span class="netbnkng_icon payoption_icon"></span>
 											<span class="option_txt lato-regular">S2M</span>
 										</a>
@@ -579,7 +579,8 @@
                                 echo '<li style="display: none;"><input type="radio" checked name="payment" class="s2m">&nbsp;&nbsp;S2m</li>';
                             }
                         @endphp
-                    </ul>
+                    </ul>-->
+                    
                     <form id="s2m-method" method="post" action="{{$s2mGateway}}" >
                         @php
                         {{  
@@ -594,7 +595,7 @@
                             }
                         }}
                         @endphp
-                    </form>-->
+                    </form>
                 </div>
 
             </div>
@@ -655,31 +656,31 @@
     $(function () {
         $('#process_payment').on('click', function(){
             var l = Ladda.create(document.querySelector('#process_payment'));
-            if ($('input.terawallet-payment-method').prop('checked')){
-                l.start();
-                $.ajax({
-                    url:'/process_payment',
-                    type: 'POST',
-                    data: {
-                        amount: {{$price['grandTotal']}},
-                        type: 'terawallet'
-                    }
-                }).done(function(e){
-                    // console.log(e);
-                    if (e.message == 'success'){
-                        window.location.href = "{{ url('booked') }}";
-                    } else if(e.info == 'low-balance'){
-                        alert('Your Terawallet Balance is low, please recharge your wallet & try again!');
-                    } else if (e.info == 'error'){
-                        alert('There was an error processing your order, please try again or contact support!');
-                    }
-                    l.stop();
-                });
-            } else if ($('input.s2m-method').prop('checked')){
+//            if ($('input.terawallet-payment-method').prop('checked')){
+//                l.start();
+//                $.ajax({
+//                    url:'/process_payment',
+//                    type: 'POST',
+//                    data: {
+//                        amount: {{$price['grandTotal']}},
+//                        type: 'terawallet'
+//                    }
+//                }).done(function(e){
+//                    // console.log(e);
+//                    if (e.message == 'success'){
+//                        window.location.href = "{{ url('booked') }}";
+//                    } else if(e.info == 'low-balance'){
+//                        alert('Your Terawallet Balance is low, please recharge your wallet & try again!');
+//                    } else if (e.info == 'error'){
+//                        alert('There was an error processing your order, please try again or contact support!');
+//                    }
+//                    l.stop();
+//                });
+//            } else if ($('input.s2m-method').prop('checked')){
                 l.start();
                 $('#s2m-method').submit();
             // alert('payment intiated');
-            }
+//            }
             <?php if(isset($s2mSuccess) && $s2mSuccess){?> 
             else if ($('input.s2m').prop('checked')){
                 l.start();
