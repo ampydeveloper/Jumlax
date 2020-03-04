@@ -80,6 +80,10 @@ class HomeController extends Controller {
                 }
             }
         }
+        
+        $data['oneSide'] = unserialize($request->oneWay);
+        $data['returnSide'] = unserialize($request->return);
+        
         if (session()->has('adults')) {
             $data['adults'] = session::get('adults');
         } else {

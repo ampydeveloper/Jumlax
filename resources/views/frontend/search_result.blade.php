@@ -168,11 +168,57 @@
                                         </div>
                                         @endif
                                     </div>  
+                                    
+                                    <?php
+                                                $layoverArray1 = array();
+                                                if(count($flight['oneWayDetails']['stops']) > 1) {
+                                                    if(is_array($flight['oneWayDetails']['stops'])) {
+                                                        $planeChange1 = (count($flight['oneWayDetails']['stops']) - 1). ' Plane change';
+                                                                foreach($flight['oneWayDetails']['stops'] as $key => $stop) {
+                                                                    if($key != 'total') {
+                                                                        $layover1 = $stop['layover']." Layover";
+                                                                        $layoverArray1[$key-1] = $layover1;
+                                                                        $secondValue = $key.". ".$stop['airport_data']['airport_name'] . ", " .$stop['airport_data']['city_name'] ." (".    $stop['iataCode'] .")"." | ".$layover1;
+                                                                        $planeChange1 .= $secondValue != '' ? ' '.$secondValue : '';
+                                                                    }
+                                                                    if(isset($stop['terminal'])) {
+                                                                        $terminal = 'Terminal '.$stop['terminal'];
+                                                                    } else { $terminal = ''; }
+
+                                                                    $planeChange1 .= $terminal != '' ? ' '.$terminal : '';
+                                                                }
+                                                    }
+                                                } else { $planeChange1 = 'No Stop'; }
+                                                            ?>
+                                    
+                                    <?php
+                                                $layoverArray = array();
+                                                if($flight['returnDetails']['stops'] != 0 && count($flight['returnDetails']['stops']) > 1) {
+                                                    if(is_array($flight['returnDetails']['stops'])) {
+                                                        $planeChange = (count($flight['returnDetails']['stops']) - 1). ' Plane change';
+                                                                foreach($flight['returnDetails']['stops'] as $key => $stop) {
+                                                                    if($key != 'total') {
+                                                                        $layover = $stop['layover']." Layover";
+                                                                        $layoverArray[$key-1] = $layover;
+                                                                        $secondValue = $key.". ".$stop['airport_data']['airport_name'] . ", " .$stop['airport_data']['city_name'] ." (".    $stop['iataCode'] .")"." | ".$layover;
+                                                                        $planeChange .= $secondValue != '' ? ' '.$secondValue : '';
+                                                                    }
+                                                                    if(isset($stop['terminal'])) {
+                                                                        $terminal = 'Terminal '.$stop['terminal'];
+                                                                    } else { $terminal = ''; }
+
+                                                                    $planeChange .= $terminal != '' ? ' '.$terminal : '';
+                                                                }
+                                                    }
+                                                } else { $planeChange = 'No Stop'; }
+                                                            ?>
 
                                     <div class="list-item-footer">
                                         <h5 class="text-bold list-item-price">{{ $flight['travelerPricings'][0]['price']['currency'].' '.$flight['travelerPricings'][0]['price']['total'] }} </h5>
                                         <form action="{{url('review')}}" method="post" id="most-search">
                                             {!! csrf_field() !!}
+                                            <input type="hidden" value="{{ serialize($layoverArray) }}" name="return">
+                                            <input type="hidden" value="{{ serialize($layoverArray1) }}" name="oneWay">
                                             <input type="hidden" value="{{ serialize($flight['itineraries']) }}" name="segment">
                                             <input type="hidden" value="{{ serialize($flight['price']) }}" name="price">
                                             <input type="hidden" value="{{ serialize($flight['travelerPricings']) }}" name="travelerPricings">
@@ -239,28 +285,10 @@
                                                     {{$resStr}}
                                                 </div>
                                                 <div class="list-item-content-line"></div>
-                                                <?php
-                                                if(count($flight['oneWayDetails']['stops']) > 1) {
-                                                    if(is_array($flight['oneWayDetails']['stops'])) {
-                                                        $planeChange = (count($flight['oneWayDetails']['stops']) - 1). ' Plane change';
-                                                                foreach($flight['oneWayDetails']['stops'] as $key => $stop) {
-                                                                    if($key != 'total') {
-                                                                        $secondValue = $key.". ".$stop['airport_data']['airport_name'] . ", " .$stop['airport_data']['city_name'] ." (".    $stop['iataCode'] .")";
-                                                                        $planeChange .= $secondValue != '' ? ' '.$secondValue : '';
-                                                                    }
-                                                                    if(isset($stop['terminal'])) {
-                                                                        $terminal = 'Terminal '.$stop['terminal'];
-                                                                    } else { $terminal = ''; }
-
-                                                                    $planeChange .= $terminal != '' ? ' '.$terminal : '';
-                                                                }
-                                                    }
-                                                } else { $planeChange = 'No Stop'; }
-                                                            ?>
                                                 
                                                 <div class="list-item-content-line-bottom text-info-dr link"
                                                      draggable="false"
-                                                     data-tooltip="{{$planeChange}}">
+                                                     data-tooltip="{{$planeChange1}}">
                                                     @if($flight['oneWayDetails']['stops']['total'] == 0)
                                                     Non-stop
                                                     @elseif($flight['oneWayDetails']['stops']['total'] == 1)
@@ -330,25 +358,6 @@
                                                     {{$resStr}}
                                                 </div>
                                                 <div class="list-item-content-line"></div>
-                                                
-                                                <?php
-                                                if(count($flight['oneWayDetails']['stops']) > 1) {
-                                                    if(is_array($flight['oneWayDetails']['stops'])) {
-                                                        $planeChange = (count($flight['oneWayDetails']['stops']) - 1). ' Plane change';
-                                                                foreach($flight['oneWayDetails']['stops'] as $key => $stop) {
-                                                                    if($key != 'total') {
-                                                                        $secondValue = $key.". ".$stop['airport_data']['airport_name'] . ", " .$stop['airport_data']['city_name'] ." (".    $stop['iataCode'] .")";
-                                                                        $planeChange .= $secondValue != '' ? ' '.$secondValue : '';
-                                                                    }
-                                                                    if(isset($stop['terminal'])) {
-                                                                        $terminal = 'Terminal '.$stop['terminal'];
-                                                                    } else { $terminal = ''; }
-
-                                                                    $planeChange .= $terminal != '' ? ' '.$terminal : '';
-                                                                }
-                                                    }
-                                                } else { $planeChange = 'No Stop'; }
-                                                            ?>
                                                 
                                                 <div class="list-item-content-line-bottom text-info-dr link"
                                                      draggable="false"
