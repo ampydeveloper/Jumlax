@@ -12,9 +12,9 @@
     <div class="container">
         <div class="toast" style="display: none" role="alert" aria-live="assertive" aria-atomic="true">
             <div class="toast-header">
-              <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
+                <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="toast-body">
             </div>
@@ -168,51 +168,59 @@
                                         </div>
                                         @endif
                                     </div>  
-                                    
-                                    <?php
-                                                $layoverArray1 = array();
-                                                if(count($flight['oneWayDetails']['stops']) < 1) {
-                                                    
-                                                    if(is_array($flight['oneWayDetails']['stops'])) {
-                                                        $planeChange1 = (count($flight['oneWayDetails']['stops']) - 1). ' Plane change';
-                                                                foreach($flight['oneWayDetails']['stops'] as $key => $stop) {
-                                                                    if($key != 'total') {
-                                                                        $layover1 = $stop['layover']." Layover";
-                                                                        $layoverArray1[$key-1] = $layover1;
-                                                                        $secondValue = $key.". ".$stop['airport_data']['airport_name'] . ", " .$stop['airport_data']['city_name'] ." (".    $stop['iataCode'] .")"." | ".$layover1;
-                                                                        $planeChange1 .= $secondValue != '' ? ' '.$secondValue : '';
-                                                                    }
-                                                                    if(isset($stop['terminal'])) {
-                                                                        $terminal = 'Terminal '.$stop['terminal'];
-                                                                    } else { $terminal = ''; }
 
-                                                                    $planeChange1 .= $terminal != '' ? ' '.$terminal : '';
-                                                                }
-                                                    }
-                                                } else { $planeChange1 = 'No Stop'; }
-                                                            ?>
-                                    
                                     <?php
-                                                $layoverArray = array();
-                                                if($flight['returnDetails']['stops'] != 0 && count($flight['returnDetails']['stops']) < 1) {
-                                                    if(is_array($flight['returnDetails']['stops'])) {
-                                                        $planeChange = (count($flight['returnDetails']['stops']) - 1). ' Plane change';
-                                                                foreach($flight['returnDetails']['stops'] as $key => $stop) {
-                                                                    if($key != 'total') {
-                                                                        $layover = $stop['layover']." Layover";
-                                                                        $layoverArray[$key-1] = $layover;
-                                                                        $secondValue = $key.". ".$stop['airport_data']['airport_name'] . ", " .$stop['airport_data']['city_name'] ." (".    $stop['iataCode'] .")"." | ".$layover;
-                                                                        $planeChange .= $secondValue != '' ? ' '.$secondValue : '';
-                                                                    }
-                                                                    if(isset($stop['terminal'])) {
-                                                                        $terminal = 'Terminal '.$stop['terminal'];
-                                                                    } else { $terminal = ''; }
+                                    $layoverArray1 = array();
+                                    if ($flight['oneWayDetails']['stops']['total'] >= 1) {
+                                        if (is_array($flight['oneWayDetails']['stops'])) {
+                                            $planeChange1 = $flight['oneWayDetails']['stops']['total'] . ' Plane change';
+                                            foreach ($flight['oneWayDetails']['stops'] as $key => $stop) {
+                                                if ($key != 'total') {
+                                                    $layover1 = (isset($stop['layover'])?$stop['layover']:0) . " Layover";
+                                                    $layoverArray1[$key - 1] = $layover1;
+                                                    $secondValue = $key . ". " . $stop['airport_data']['airport_name'] . ", " . $stop['airport_data']['city_name'] . " (" . $stop['iataCode'] . ")" . " | " . $layover1;
+                                                    $planeChange1 .= $secondValue != '' ? ' ' . $secondValue : '';
+                                                }
+                                                if (isset($stop['terminal'])) {
+                                                    $terminal = 'Terminal ' . $stop['terminal'];
+                                                } else {
+                                                    $terminal = '';
+                                                }
 
-                                                                    $planeChange .= $terminal != '' ? ' '.$terminal : '';
-                                                                }
-                                                    }
-                                                } else { $planeChange = 'No Stop'; }
-                                                            ?>
+                                                $planeChange1 .= $terminal != '' ? ' ' . $terminal : '';
+                                            }
+                                        }
+                                    } else {
+                                        $planeChange1 = 'No Stop';
+                                    }
+                                    ?>
+
+                                    <?php
+                                    $layoverArray = array();
+                                    if ($flight['returnDetails']['stops'] != 0 && count($flight['returnDetails']['stops']) > 1) {
+                                        if (is_array($flight['returnDetails']['stops'])) {
+                                            $planeChange = (count($flight['returnDetails']['stops']) - 1) . ' Plane change';
+                                            foreach ($flight['returnDetails']['stops'] as $key => $stop) {
+                                                if ($key != 'total') {
+                                                    $layover = (isset($stop['layover'])?$stop['layover']:0) . " Layover";
+//                                                    $layover = $stop['layover'] . " Layover";
+                                                    $layoverArray[$key - 1] = $layover;
+                                                    $secondValue = $key . ". " . $stop['airport_data']['airport_name'] . ", " . $stop['airport_data']['city_name'] . " (" . $stop['iataCode'] . ")" . " | " . $layover;
+                                                    $planeChange .= $secondValue != '' ? ' ' . $secondValue : '';
+                                                }
+                                                if (isset($stop['terminal'])) {
+                                                    $terminal = 'Terminal ' . $stop['terminal'];
+                                                } else {
+                                                    $terminal = '';
+                                                }
+
+                                                $planeChange .= $terminal != '' ? ' ' . $terminal : '';
+                                            }
+                                        }
+                                    } else {
+                                        $planeChange = 'No Stop';
+                                    }
+                                    ?>
 
                                     <div class="list-item-footer">
                                         <h5 class="text-bold list-item-price">{{ $flight['travelerPricings'][0]['price']['currency'].' '.$flight['travelerPricings'][0]['price']['total'] }} </h5>
@@ -241,10 +249,10 @@
                                                 break;
                                             }
                                         }
-                                        if($flight['numberOfBookableSeats'] == 1) {
+                                        if ($flight['numberOfBookableSeats'] == 1) {
                                             $bookableSeats = "1 Seat Available";
                                         } else {
-                                            $bookableSeats = $flight['numberOfBookableSeats']." Seats Available";
+                                            $bookableSeats = $flight['numberOfBookableSeats'] . " Seats Available";
                                         }
                                         ?>
                                         <span>Departure | </span>
@@ -280,16 +288,22 @@
                                             </div>
                                             <div class="list-item-content-line-wrapper small plane-change-topen" data-toggle="tooltip" data-html="true" data-placement="top">
                                                 <div class="list-item-content-line-top"> 
-                                                    <?php $resStr = str_replace('H', 'hrs', $flight['oneWayDetails']['duration']); 
-                                                       $resStr = str_replace('M', 'mins', $resStr);
+                                                    <?php
+                                                    $resStr = str_replace('H', ' hrs ', $flight['oneWayDetails']['duration']);
+                                                    $resStr = str_replace('M', ' mins ', $resStr);
                                                     ?>
                                                     {{$resStr}}
                                                 </div>
                                                 <div class="list-item-content-line"></div>
-                                                
+
+                                                @if($planeChange1 != "No Stop")
                                                 <div class="list-item-content-line-bottom text-info-dr link"
                                                      draggable="false"
                                                      data-tooltip="{{$planeChange1}}">
+                                                @else    
+                                                <div class="list-item-content-line-bottom text-info-dr"
+                                                     draggable="false">
+                                                    @endif
                                                     @if($flight['oneWayDetails']['stops']['total'] == 0)
                                                     Non-stop
                                                     @elseif($flight['oneWayDetails']['stops']['total'] == 1)
@@ -297,36 +311,36 @@
                                                     @else
                                                     {{$flight['oneWayDetails']['stops']['total']}} stops
                                                     @endif
-                                                    
+
 
                                                     @if(count($flight['oneWayDetails']['stops']) > 1)
-<!--                                                    <div class="tooltip plane-change-tooltip" role="tooltip">
-                                                        <div class="arrow"></div>
-                                                        <div class="tooltip-inner">
-
-                                                            @if(is_array($flight['oneWayDetails']['stops']))
-                                                            {{count($flight['oneWayDetails']['stops']) - 1}} Plane change<br>
-                                                            @foreach($flight['oneWayDetails']['stops'] as $key => $stop) 
-                                                            @if($key != 'total')
-                                                            {{$key.". ".$stop['airport_data']['airport_name'] . ", " .$stop['airport_data']['city_name'] ." (".    $stop['iataCode'] .")"}} <br>
-                                                            @if(isset($stop['terminal']))
-                                                            {{'Terminal '.$stop['terminal']}} <br>
-                                                            @endif
-                                                            @endif
-                                                            @endforeach
-                                                            @endif
-                                                        </div>
-                                                    </div>-->
+                                                    <!--                                                    <div class="tooltip plane-change-tooltip" role="tooltip">
+                                                                                                            <div class="arrow"></div>
+                                                                                                            <div class="tooltip-inner">
+                                                    
+                                                                                                                @if(is_array($flight['oneWayDetails']['stops']))
+                                                                                                                {{count($flight['oneWayDetails']['stops']) - 1}} Plane change<br>
+                                                                                                                @foreach($flight['oneWayDetails']['stops'] as $key => $stop) 
+                                                                                                                @if($key != 'total')
+                                                                                                                {{$key.". ".$stop['airport_data']['airport_name'] . ", " .$stop['airport_data']['city_name'] ." (".    $stop['iataCode'] .")"}} <br>
+                                                                                                                @if(isset($stop['terminal']))
+                                                                                                                {{'Terminal '.$stop['terminal']}} <br>
+                                                                                                                @endif
+                                                                                                                @endif
+                                                                                                                @endforeach
+                                                                                                                @endif
+                                                                                                            </div>
+                                                                                                        </div>-->
                                                     @endif
                                                 </div>
                                             </div>
-                                            <?php 
+                                            <?php
                                             $arrival = \Carbon\Carbon::parse($flight['oneWayDetails']['arrival']['at'])->format('m/d/y');
-                                             $departure = \Carbon\Carbon::parse($flight['oneWayDetails']['departure']['at'])->format('m/d/y');
-                                             
-                                                $date1 = new DateTime($arrival);
-                                                $date2 = new DateTime($departure);
-                                                $diff = $date1->diff($date2);
+                                            $departure = \Carbon\Carbon::parse($flight['oneWayDetails']['departure']['at'])->format('m/d/y');
+
+                                            $date1 = new DateTime($arrival);
+                                            $date2 = new DateTime($departure);
+                                            $diff = $date1->diff($date2);
                                             ?>
                                             <div class="list-item-content-right">
                                                 <div class="text-bold text-base">{{ \Carbon\Carbon::parse($flight['oneWayDetails']['arrival']['at'])->format('H:i') }} <span style="color:red; font-size: 10px">+{{$diff->days}} DAY</span></div>
@@ -352,17 +366,23 @@
 
                                             <div class="list-item-content-line-wrapper small plane-change-topen" data-toggle="tooltip" data-html="true" data-placement="top">
                                                 <div class="list-item-content-line-top">
-                                                    
-                                                     <?php $resStr = str_replace('H', 'hrs', $flight['returnDetails']['duration']); 
-                                                       $resStr = str_replace('M', 'mins', $resStr);
+
+                                                    <?php
+                                                    $resStr = str_replace('H', ' hrs ', $flight['returnDetails']['duration']);
+                                                    $resStr = str_replace('M', ' mins ', $resStr);
                                                     ?>
                                                     {{$resStr}}
                                                 </div>
                                                 <div class="list-item-content-line"></div>
-                                                
+
+                                                @if($planeChange != "No Stop")
                                                 <div class="list-item-content-line-bottom text-info-dr link"
                                                      draggable="false"
                                                      data-tooltip="{{$planeChange}}" >
+                                                @else    
+                                                <div class="list-item-content-line-bottom text-info-dr"
+                                                     draggable="false">
+                                                @endif    
                                                     @if($flight['returnDetails']['stops']['total'] == 0)
                                                     Non-stop
                                                     @elseif($flight['returnDetails']['stops']['total'] == 1)
@@ -370,25 +390,25 @@
                                                     @else
                                                     {{$flight['returnDetails']['stops']['total']}} stops
                                                     @endif
-                                                    
-                                                    @if(count($flight['oneWayDetails']['stops']) > 1)
-<!--                                                    <div class="tooltip plane-change-tooltip" role="tooltip">
-                                                        <div class="arrow"></div>
-                                                        <div class="tooltip-inner">
 
-                                                            @if(is_array($flight['oneWayDetails']['stops']))
-                                                            {{count($flight['oneWayDetails']['stops']) - 1}} Plane change<br>
-                                                            @foreach($flight['oneWayDetails']['stops'] as $key => $stop) 
-                                                            @if($key != 'total')
-                                                            {{$key.". ".$stop['airport_data']['airport_name'] . ", " .$stop['airport_data']['city_name'] ." (".    $stop['iataCode'] .")"}} <br>
-                                                            @if(isset($stop['terminal']))
-                                                            {{'Terminal '.$stop['terminal']}} <br>
-                                                            @endif
-                                                            @endif
-                                                            @endforeach
-                                                            @endif
-                                                        </div>
-                                                    </div>-->
+                                                    @if(count($flight['oneWayDetails']['stops']) > 1)
+                                                    <!--                                                    <div class="tooltip plane-change-tooltip" role="tooltip">
+                                                                                                            <div class="arrow"></div>
+                                                                                                            <div class="tooltip-inner">
+                                                    
+                                                                                                                @if(is_array($flight['oneWayDetails']['stops']))
+                                                                                                                {{count($flight['oneWayDetails']['stops']) - 1}} Plane change<br>
+                                                                                                                @foreach($flight['oneWayDetails']['stops'] as $key => $stop) 
+                                                                                                                @if($key != 'total')
+                                                                                                                {{$key.". ".$stop['airport_data']['airport_name'] . ", " .$stop['airport_data']['city_name'] ." (".    $stop['iataCode'] .")"}} <br>
+                                                                                                                @if(isset($stop['terminal']))
+                                                                                                                {{'Terminal '.$stop['terminal']}} <br>
+                                                                                                                @endif
+                                                                                                                @endif
+                                                                                                                @endforeach
+                                                                                                                @endif
+                                                                                                            </div>
+                                                                                                        </div>-->
                                                     @endif
                                                 </div>
 
@@ -422,7 +442,7 @@
             </div>
             <div class="col-7">
                 <div class="float-right">
-                <nav class="page-number"></nav>
+                    <nav class="page-number"></nav>
                 </div>
             </div><!--col-->
 
@@ -432,64 +452,125 @@
 @endsection
 <style>
     nav.page-number.light-theme.simple-pagination ul li {
-    position: relative;
-    display: block;
-    margin-left: -1px;
-    line-height: 1.25;
-    color: #20a8d8;
-    float: left
-}
-   nav.page-number.light-theme.simple-pagination ul li.active span {
-       position: relative;
-    display: block;
-    padding: 0.5rem 0.75rem;
-    margin-left: -1px;
-    line-height: 1.25;
-    color: #fff;
-    background-color: #007bff;
-    border: 1px solid #dee2e6;
-}
-.toast {
-    position: absolute;
-    opacity: 1 !important;
-    z-index: 999999;
-    right: 0;
-    top: 50%;
-}
+        position: relative;
+        display: block;
+        margin-left: -1px;
+        line-height: 1.25;
+        color: #20a8d8;
+        float: left
+    }
+    nav.page-number.light-theme.simple-pagination ul li.active span {
+        position: relative;
+        display: block;
+        padding: 0.5rem 0.75rem;
+        margin-left: -1px;
+        line-height: 1.25;
+        color: #fff;
+        background-color: #007bff;
+        border: 1px solid #dee2e6;
+    }
+    .toast {
+        position: absolute;
+        opacity: 1 !important;
+        z-index: 999999;
+        right: 0;
+        top: 50%;
+    }
 </style>
 @push('scripts')
- <script src="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/jquery.simplePagination.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/jquery.simplePagination.js"></script>
 <script type="text/javascript">
-    $(document).ready(function () {
-           
-        var items = $(".list-tickets");
-        var numItems = items.length;
-        var perPage = 5;
-        $(".total-user").text(numItems + ' Total Flight Search');
+$(document).ready(function () {
 
-        items.slice(perPage).hide();
+    var items = $(".list-tickets");
+    var numItems = items.length;
+    var perPage = 5;
+    $(".total-user").text(numItems + ' Total Flight Search');
+    items.slice(perPage).hide();
+    
+    var pathname = window.location.href;
+    var explodePath = pathname.split('#');
+    var defaultPage =1;
+    if(explodePath.length > 1) {
+        defaultPage = explodePath[1];
+    }
 
-        $('.page-number').pagination({
-            items: numItems,
-            itemsOnPage: perPage,
-            prevText: "&laquo;",
-            nextText: "&raquo;",
-            hrefTextPrefix: "#",
-            onPageClick: function (pageNumber) {
-                var showFrom = perPage * (pageNumber - 1);
+    $('.page-number').pagination({
+        items: numItems,
+        itemsOnPage: perPage,
+        currentPage: defaultPage,
+        prevText: "&laquo;",
+        nextText: "&raquo;",
+        hrefTextPrefix: "#",
+        onPageClick: function (pageNumber) {
+            var showFrom = perPage * (pageNumber - 1);
+            var showTo = showFrom + perPage;
+            items.hide().slice(showFrom, showTo).show();
+        },
+        onInit: function () {
+            if(explodePath.length > 1) {
+                var NewPageNumber= defaultPage;
+                var showFrom = perPage * (NewPageNumber - 1);
                 var showTo = showFrom + perPage;
                 items.hide().slice(showFrom, showTo).show();
             }
-        });
-        
-        var p = $(".list-tickets").first();
-        $(document).on('click', '.page-link', function(){
-              $("html, body").animate({
-                scrollTop: p.scrollTop()
-            }, 1000);
-        });
-        
-        $(".search-from, .search-to").select2({
+        }
+    });
+
+    var p = $(".list-tickets").first();
+    $(document).on('click', '.page-link', function () {
+        $("html, body").animate({
+            scrollTop: p.scrollTop()
+        }, 1000);
+    });
+
+    $(".search-from, .search-to").select2({
+        ajax: {
+            url: '/get-lisit',
+            type: 'POST',
+            dataType: 'json',
+            data: function (params) {
+                return {
+                    message: params.term
+                };
+            },
+            processResults: function (data, params) {
+                return {
+                    results: data.data
+                };
+            },
+            cache: true
+        },
+        placeholder: 'Search City or Airport',
+        minimumInputLength: 1,
+        templateResult: formatRepo,
+        templateSelection: formatRepoSelection
+    });
+    function formatRepo(repo) {
+        if (repo.loading) {
+            return 'Searching...';
+        }
+        var $container = $(
+                "<div class='select2-result-repository clearfix'>" +
+                "<div class='select2-result-repository__meta'>" +
+                "<div class='select2-result-repository__title'></div>" +
+                "<div class='select2-result-repository__description'></div>" +
+                "</div>" +
+                "</div>"
+                );
+        $container.find(".select2-result-repository__title").text(repo.city_name + ', ' + repo.country_name);
+        $container.find(".select2-result-repository__description").text(repo.airport_name + ', ' + repo.airport_code);
+        return $container;
+    }
+    function formatRepoSelection(repo) {
+        return (repo.city_name != undefined) ? 'Search City or Airport' : repo.text;
+    }
+    $('.search-from').on('select2:select', function (e) {
+        var data = e.params.data;
+        $(".search-from").select2("destroy");
+        var option = $("<option value='" + data.airport_code + "' selected>" + data.airport_name + ", " + data.airport_code + "</option>");
+        $('.search-from-set-val').empty().append(option);
+        $(".search-from").select2({
             ajax: {
                 url: '/get-lisit',
                 type: 'POST',
@@ -511,171 +592,125 @@
             templateResult: formatRepo,
             templateSelection: formatRepoSelection
         });
-        function formatRepo(repo) {
-            if (repo.loading) {
-                return 'Searching...';
-            }
-            var $container = $(
-                    "<div class='select2-result-repository clearfix'>" +
-                    "<div class='select2-result-repository__meta'>" +
-                    "<div class='select2-result-repository__title'></div>" +
-                    "<div class='select2-result-repository__description'></div>" +
-                    "</div>" +
-                    "</div>"
-                    );
-            $container.find(".select2-result-repository__title").text(repo.city_name + ', ' + repo.country_name);
-            $container.find(".select2-result-repository__description").text(repo.airport_name + ', ' + repo.airport_code);
-            return $container;
-        }
-        function formatRepoSelection(repo) {
-            return (repo.city_name != undefined) ? 'Search City or Airport' : repo.text;
-        }
-        $('.search-from').on('select2:select', function (e) {
-            var data = e.params.data;
-            $(".search-from").select2("destroy");
-            var option = $("<option value='" + data.airport_code + "' selected>" + data.airport_name + ", " + data.airport_code + "</option>");
-            $('.search-from-set-val').empty().append(option);
-            $(".search-from").select2({
-                ajax: {
-                    url: '/get-lisit',
-                    type: 'POST',
-                    dataType: 'json',
-                    data: function (params) {
-                        return {
-                            message: params.term
-                        };
-                    },
-                    processResults: function (data, params) {
-                        return {
-                            results: data.data
-                        };
-                    },
-                    cache: true
+    });
+    $('.search-to').on('select2:select', function (e) {
+        var data = e.params.data;
+        $(".search-to").select2("destroy");
+        var option = $("<option value='" + data.airport_code + "' selected>" + data.airport_name + ", " + data.airport_code + "</option>");
+        $('.search-to-set-val').empty().append(option);
+        $(".search-to").select2({
+            ajax: {
+                url: '/get-lisit',
+                type: 'POST',
+                dataType: 'json',
+                data: function (params) {
+                    return {
+                        message: params.term
+                    };
                 },
-                placeholder: 'Search City or Airport',
-                minimumInputLength: 1,
-                templateResult: formatRepo,
-                templateSelection: formatRepoSelection
-            });
-        });
-        $('.search-to').on('select2:select', function (e) {
-            var data = e.params.data;
-            $(".search-to").select2("destroy");
-            var option = $("<option value='" + data.airport_code + "' selected>" + data.airport_name + ", " + data.airport_code + "</option>");
-            $('.search-to-set-val').empty().append(option);
-            $(".search-to").select2({
-                ajax: {
-                    url: '/get-lisit',
-                    type: 'POST',
-                    dataType: 'json',
-                    data: function (params) {
-                        return {
-                            message: params.term
-                        };
-                    },
-                    processResults: function (data, params) {
-                        return {
-                            results: data.data
-                        };
-                    },
-                    cache: true
+                processResults: function (data, params) {
+                    return {
+                        results: data.data
+                    };
                 },
-                placeholder: 'Search City or Airport',
-                minimumInputLength: 1,
-                templateResult: formatRepo,
-                templateSelection: formatRepoSelection
-            });
+                cache: true
+            },
+            placeholder: 'Search City or Airport',
+            minimumInputLength: 1,
+            templateResult: formatRepo,
+            templateSelection: formatRepoSelection
         });
+    });
 
-        $(".tripType").on('change', function () {
-            if ($(this).val() == 'oneway') {
-                $(".return").val('');
-                $("#returnDateCol").css('display', 'none');
-            } else {
-                $("#returnDateCol").css('display', 'block');
-            }
-        });
+    $(".tripType").on('change', function () {
+        if ($(this).val() == 'oneway') {
+            $(".return").val('');
+            $("#returnDateCol").css('display', 'none');
+        } else {
+            $("#returnDateCol").css('display', 'block');
+        }
+    });
 
-        let departureDate;
-        var date = new Date();
-        date.setDate(date.getDate());
-        $('#departure').datepicker({
-            format: 'dd M yyyy',
-            startDate: date,
-        });
-        $('#departure').datepicker('setDate', new Date('<?php echo $requestdata['departure']; ?>'));
+    let departureDate;
+    var date = new Date();
+    date.setDate(date.getDate());
+    $('#departure').datepicker({
+        format: 'dd M yyyy',
+        startDate: date,
+    });
+    $('#departure').datepicker('setDate', new Date('<?php echo $requestdata['departure']; ?>'));
+    $('#return').datepicker({
+        format: 'dd M yyyy',
+        startDate: date,
+    });
+    $('#return').datepicker('setDate', new Date('<?php echo isset($requestdata['return']) ? $requestdata['return'] : ""; ?>'));
+
+    $('#departure').on('changeDate', function () {
+        departureDate = new Date($('#departure').val());
+        $('#return').datepicker('destroy');
         $('#return').datepicker({
             format: 'dd M yyyy',
-            startDate: date,
+            startDate: departureDate
         });
-        $('#return').datepicker('setDate', new Date('<?php echo isset($requestdata['return']) ? $requestdata['return'] : ""; ?>'));
-
-        $('#departure').on('changeDate', function () {
-            departureDate = new Date($('#departure').val());
-            $('#return').datepicker('destroy');
-            $('#return').datepicker({
-                format: 'dd M yyyy',
-                startDate: departureDate
-            });
-        });
-        
-        
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            })
-            $(".home-search-fm").on('submit', function (e) {
-                e.preventDefault();
-                // return false;
-                var $this = $(this);
-                $this.find('#for-msubmit').attr("disabled", true);
-                var flightType = $this.find('[name="flight_type"]').val(),
-                        from = $this.find('[name="from"]').val(),
-                        to = $this.find('[name="to"]').val(),
-                        passengerClass = $this.find('[name="passenger-class"]').val(),
-                        departure = $this.find('[name="departure"]').val(),
-                        departureVal = new Date(departure).toJSON().slice(0, 10),
-                        returnVal = null,
-                        passengerAdult = $this.find('[name="passenger_adult"]').val(),
-                        passengerChild = $this.find('[name="passenger_child"]').val(),
-                        passengerInfant = $this.find('[name="passenger_infant"]').val(),
-                        actionUrl = $this.attr('action');
-                var returnData = $this.find('[name="return"]').val().trim();
-                if(returnData && returnData.length > 0){
-                    returnVal = new Date(returnData).toJSON().slice(0, 10);
-                }else{
-                    flightType = "oneway";
-                }
-                var parameters = '/' + passengerClass + '/' + flightType + '/' + from + '/' + to + '/' + departureVal + '/' + returnVal + '/' + passengerAdult + '/' + passengerChild + '/' + passengerInfant + '/' + '0';
-                actionUrlFinal = actionUrl + parameters;
-                // console.log(actionUrl);
-                // console.log(actionUrlFinal);
-                 $.ajax({
-                     type: "GET",
-                     url: actionUrlFinal,
-                     dataType: "json",
-                     success: function (data) {
-                         console.log(data);
-                        location.href = '/flight-search-listing' + parameters;
-                     },
-                     error: function (xhr, status, error) {
-                         var res = $.parseJSON(xhr.responseText);
-                         if(!res.status){
-                             var html = '';
-                             for(var i =0; i<res.errors.length; i++){
-                                 html += '<span style="display:flex; color:red">'+res.errors[i].detail+'</span>'; 
-                             }
-                             $(".toast-body").append(html);
-                             $(".toast").show();
-                          }
-                         $(".home-search-fm").find('#for-msubmit').attr("disabled", false);
-                         siyApp.ajaxInputError(error, $(".home-search-fm"));
-                     }
-                 });
-                 e.preventDefault();
-            });
-
     });
+
+
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    })
+    $(".home-search-fm").on('submit', function (e) {
+        e.preventDefault();
+        // return false;
+        var $this = $(this);
+        $this.find('#for-msubmit').attr("disabled", true);
+        var flightType = $this.find('[name="flight_type"]').val(),
+                from = $this.find('[name="from"]').val(),
+                to = $this.find('[name="to"]').val(),
+                passengerClass = $this.find('[name="passenger-class"]').val(),
+                departure = $this.find('[name="departure"]').val(),
+                departureVal = new Date(departure).toJSON().slice(0, 10),
+                returnVal = null,
+                passengerAdult = $this.find('[name="passenger_adult"]').val(),
+                passengerChild = $this.find('[name="passenger_child"]').val(),
+                passengerInfant = $this.find('[name="passenger_infant"]').val(),
+                actionUrl = $this.attr('action');
+        var returnData = $this.find('[name="return"]').val().trim();
+        if (returnData && returnData.length > 0) {
+            returnVal = new Date(returnData).toJSON().slice(0, 10);
+        } else {
+            flightType = "oneway";
+        }
+        var parameters = '/' + passengerClass + '/' + flightType + '/' + from + '/' + to + '/' + departureVal + '/' + returnVal + '/' + passengerAdult + '/' + passengerChild + '/' + passengerInfant + '/' + '0';
+        actionUrlFinal = actionUrl + parameters;
+        // console.log(actionUrl);
+        // console.log(actionUrlFinal);
+        $.ajax({
+            type: "GET",
+            url: actionUrlFinal,
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                location.href = '/flight-search-listing' + parameters;
+            },
+            error: function (xhr, status, error) {
+                var res = $.parseJSON(xhr.responseText);
+                if (!res.status) {
+                    var html = '';
+                    for (var i = 0; i < res.errors.length; i++) {
+                        html += '<span style="display:flex; color:red">' + res.errors[i].detail + '</span>';
+                    }
+                    $(".toast-body").append(html);
+                    $(".toast").show();
+                }
+                $(".home-search-fm").find('#for-msubmit').attr("disabled", false);
+                siyApp.ajaxInputError(error, $(".home-search-fm"));
+            }
+        });
+        e.preventDefault();
+    });
+
+});
 </script>
 @endpush
