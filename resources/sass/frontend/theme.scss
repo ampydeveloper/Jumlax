@@ -402,8 +402,8 @@ table {
     left: 50%;
     top: 50%;
     transform: translate3d(-50%,0%,0);
-    transition: all .3s ease;
-    transition-delay: 1.2s;
+    /*transition: all .3s ease;*/
+    /*transition-delay: 1.2s;*/
     width: 0;
     height: 0;
     border-style: solid;
@@ -414,7 +414,7 @@ table {
   &:after {
     text-transform: none;
     content: attr(data-tooltip);
-    font-size: 14px;
+    font-size: 12px;
     position: absolute;
     color: #fff;
     background: #282828;
@@ -429,8 +429,8 @@ table {
     top: 0;
     border-radius: 4px;
     transform: translate3d(-50%,0%,0);
-    transition: all .3s ease;
-    transition-delay: 0.5s;
+    /*transition: all .3s ease;*/
+    /*transition-delay: 0.5s;*/
   }
   &:hover {
     // TOOLTIP FADEIN AND TRANSLATION
@@ -1105,6 +1105,10 @@ ul.currency_options li.is-active a {
     width: 26px;
     height: 22px;
     margin-right: 5px
+}
+
+.justify-content-sm-center a {
+    color: #0878be;
 }
 
 .hdfc_icon {
