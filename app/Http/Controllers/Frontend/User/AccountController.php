@@ -26,7 +26,7 @@ class AccountController extends Controller {
         $bookings = Bookings::where('user_id', Auth::user()->id)->with('passengers')->get();
         $charter_bookings = CharterBooking::where('user_id', Auth::user()->id)->with('passengers','charterDetails.planes.charterDetails')->get();
 //        dump($data);
-        
+        $data = [];
         if (count($bookings) > 0) {
             foreach ($bookings as $key => $booking_details) {
                 

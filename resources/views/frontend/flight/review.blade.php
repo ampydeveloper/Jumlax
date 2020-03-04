@@ -90,7 +90,7 @@
                         <div class="row">
                             <div class="col-sm-3 plane">
                                 <img src="http://pics.avs.io/60/24/{{$val['carrierCode']}}.png" alt=""><br>
-                                {{$val['aircraft']['code']}}
+                                {{$val['carrierCode'] .'-'. $val['aircraft']['code']}}
                             </div>
                             <div class="col-sm-3 destins">
                                 <span class="time">{{ \Carbon\Carbon::parse($val['departure']['at'])->format('h:i') }}</span>
@@ -114,8 +114,8 @@
                             <div class="col-sm-3 all-time">
                                 <?php
                                 $explode1 = explode('PT', $val['duration']);
-                                $resStr = str_replace('H', 'hrs', $explode1[1]);
-                                $resStr = str_replace('M', 'mins', $resStr);
+                                $resStr = str_replace('H', ' hrs', $explode1[1]);
+                                $resStr = str_replace('M', ' mins', $resStr);
                                 ?>
                                 {{$resStr}}
                                 <hr />
@@ -138,7 +138,7 @@
                                     @foreach($airports as $values)
                                     @if($values->airport_code == $val['arrival']['iataCode'])
                                     {{$values->airport_name}},
-                                    {{$value->city_name}}
+                                    {{$values->city_name}}
                                     @break
                                     @endif
                                     @endforeach

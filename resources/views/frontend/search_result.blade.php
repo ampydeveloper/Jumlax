@@ -171,7 +171,8 @@
                                     
                                     <?php
                                                 $layoverArray1 = array();
-                                                if(count($flight['oneWayDetails']['stops']) > 1) {
+                                                if(count($flight['oneWayDetails']['stops']) < 1) {
+                                                    
                                                     if(is_array($flight['oneWayDetails']['stops'])) {
                                                         $planeChange1 = (count($flight['oneWayDetails']['stops']) - 1). ' Plane change';
                                                                 foreach($flight['oneWayDetails']['stops'] as $key => $stop) {
@@ -193,7 +194,7 @@
                                     
                                     <?php
                                                 $layoverArray = array();
-                                                if($flight['returnDetails']['stops'] != 0 && count($flight['returnDetails']['stops']) > 1) {
+                                                if($flight['returnDetails']['stops'] != 0 && count($flight['returnDetails']['stops']) < 1) {
                                                     if(is_array($flight['returnDetails']['stops'])) {
                                                         $planeChange = (count($flight['returnDetails']['stops']) - 1). ' Plane change';
                                                                 foreach($flight['returnDetails']['stops'] as $key => $stop) {

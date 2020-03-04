@@ -38,8 +38,8 @@ class SendContact extends Mailable
     {
         return $this->from(config('mail.from.address'), config('mail.from.name'))
             ->to(config('mail.from.address'), config('mail.from.name'))
-            ->view('frontend.mail.booked')
-            ->text('frontend.mail.booked-text')
+            ->view('frontend.mail.contact')
+            ->text('frontend.mail.contact')
             ->subject(__('strings.emails.contact.subject', ['app_name' => app_name()]))
             ->replyTo($this->request->email, $this->request->name);
     }

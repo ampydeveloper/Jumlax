@@ -39,7 +39,7 @@
 
                 <input type="submit" class="button button-primary button-block button-sm" value="login" >
                 <br>
-                Don't have a account ? <a href="/register">signup here</a>
+                Don't have a account ? <a href="/register">Signup Now</a>
 
                 {{ html()->form()->close() }}
             </div>

@@ -81,7 +81,7 @@ jQuery('document').ready(function ($) {
         if (error.status == 401) {
             location.reload();
         }
-        
+       
         //removing all error classes
         formSel.find('.alert-danger').text('');
         formSel.find('.alert-danger').removeClass('alert-danger');

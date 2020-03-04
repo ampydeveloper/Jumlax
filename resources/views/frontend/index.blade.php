@@ -385,7 +385,7 @@
                 ?>
                 <input type="hidden" value="1" name="popular_destination">
                 <input type="hidden" value="TIP" name="from">
-                <input type="hidden" value="BOM" name="to" class="city">
+                <input type="hidden" value="DEL" name="to" class="city">
                 <input type="hidden" value="oneway" name="flight_type">
                 <input type="hidden" value="<?php echo $var_subtracted_date ?>" name="departure">
                 <input type="hidden" value="<?php echo date('Y'); ?>" name="period">
@@ -396,7 +396,7 @@
                 <input type="hidden" value="analytics.travelers.score" name="sort">
                 <input type="hidden" value="10" name="max">
                 <div class="submit-fm">
-                    <button class="button button-primary button-sm button-naira button-naira-up popular-destination" data-city="BOM">
+                    <button class="button button-primary button-sm button-naira button-naira-up " data-city="DEL" id="popular-destination">
                         <span class="icon fas fa-search"></span>
                         <span>find tickets</span>
                     </button>
@@ -697,7 +697,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             })
-            $(".thumbnail-variant-4").on('click', function (e) {
+            $(".thumbnail-variant-4, #popular-destination").on('click', function (e) {
                 $("#most-search").find('.alert-danger').text('');
                 $("#most-search").find('.alert').removeClass('alert-danger');
                 $(".city").val($(this).attr('data-city'));
@@ -731,12 +731,14 @@
                         location.href = 'flight-search-listing' + parameters;
                      },
                      error: function (xhr, status, error) {
-                          var res = $.parseJSON(xhr.responseText);
-                          if(!res.status){
-                            $("#most-search").find('.alert').addClass('alert-danger').text(res.message);
-                          }
-                         siyApp.ajaxInputErrorAmadeus(res, $("#most-search"));
-                     }
+                        var res = $.parseJSON(xhr.responseText);
+                        if(!res.status){
+                             siyApp.ajaxInputErrorAmadeus(res, $("#most-search"));
+                               if(res.message === 'No itinerary found for requested segment!.'){
+                                 $("#most-search").find('.alert').addClass('alert-danger').text(res.message).show();
+                             }
+                         }
+                 }
                  });
                  e.preventDefault();
             });
@@ -784,9 +786,9 @@
                        
                          $(".amadeus-flight-search").find('.submit-fm button').attr("disabled", false);
                          siyApp.ajaxInputErrorAmadeus(res, $(".amadeus-flight-search"));
-                          if(res.message === 'No itinerary found for requested segment!'){
+                          if(res.message === 'No itinerary found for requested segment!.'){
                              $("#errors").addClass('alert-danger').text(res.message).show();
-                        }
+                          }
                      }
                  });
                  e.preventDefault();

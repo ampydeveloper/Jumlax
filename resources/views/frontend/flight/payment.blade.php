@@ -721,5 +721,7 @@
             // $('#process_payment').trigger('click');
         <?php }?>
     });
+    
+  
 </script>
 @endpush

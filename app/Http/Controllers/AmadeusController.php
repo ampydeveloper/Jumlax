@@ -173,20 +173,19 @@ class AmadeusController extends Controller {
         }
 
         $gettoken = AmadeusTokens::first();
-        if ($gettoken) {
-            $token = $gettoken->token;
-        } else {
-            $token = $this->generateToken();
-            $amadeus = new AmadeusTokens;
-            $amadeus->token = $token;
-            $amadeus->save();
-        }
-
+//        if ($gettoken) {
+//            $token = $gettoken->token;
+//        } else {
+//            $token = $this->generateToken();
+//            $amadeus = new AmadeusTokens;
+//            $amadeus->token = $token;
+//            $amadeus->save();
+//        }
+        $token = $this->generateToken();
         if (empty($return)) {
-
-            $src = "https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=$from&destinationLocationCode=$to&departureDate=$departure&adults=$passenger_adult&children=$passenger_child&infants=$passenger_infant&currencyCode=LYD&travelClass=$passenger_class";
+            $src = "https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=$from&destinationLocationCode=$to&departureDate=$departure&adults=$passenger_adult&children=$passenger_child&infants=$passenger_infant&currencyCode=LYD&travelClass=$passenger_class&max=75";
         } else {
-            $src = "https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=$from&destinationLocationCode=$to&departureDate=$departure&returnDate=$return&adults=$passenger_adult&children=$passenger_child&infants=$passenger_infant&currencyCode=LYD&travelClass=$passenger_class";
+            $src = "https://test.api.amadeus.com/v2/shopping/flight-offers?originLocationCode=$from&destinationLocationCode=$to&departureDate=$departure&returnDate=$return&adults=$passenger_adult&children=$passenger_child&infants=$passenger_infant&currencyCode=LYD&travelClass=$passenger_class&max=75";
         }
 
         $curl = curl_init();
@@ -348,8 +347,8 @@ class AmadeusController extends Controller {
 //                dd($res);
                 return response()->json(['status' => false, 'errors' => $res['errors']], 400);
             } else {
-                return response()->json(['status' => false, 'message' => 'No itinerary found for requested segment!'], 400);
-//                return redirect()->back()->with('message', 'No itinerary found for requested segment!');
+                return response()->json(['status' => false, 'message' => 'No itinerary found for requested segment!.'], 400);
+//                return redirect()->back()->with('message', 'No itinerary found for requested segment!.');
             }
         }
 

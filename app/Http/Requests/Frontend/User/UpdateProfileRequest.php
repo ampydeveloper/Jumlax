@@ -27,6 +27,7 @@ class UpdateProfileRequest extends FormRequest {
      * @return array
      */
     public function rules(Request $request) {
+        
         if ($request->organization_name != null && $request->representative_name != null) {
             return [
                 'organization_name' => ['required', 'max:191'],
