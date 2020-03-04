@@ -19,21 +19,13 @@
 
                 </div>
             </div>
- <div class="toast" style="display: none" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="toast-header">
-              <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="toast-body">
-            </div>
-        </div>
             <div class="swiper-onSlider header-back-outer">
                 @include('frontend.includes.nav')
                 <div class="container container-wide section-70 section-xxl-top-200 section-xxl-bottom-220">
                     <div class="row justify-content-sm-center">
                         <div class="col-sm-12 col-md-11 col-lg-10">
                             <div class="responsive-tabs text-lg-left nav-custom-dark view-animate fadeInUpSmall active" data-type="horizontal" style="display: block; width: 100%;">
+                                  
                                 <ul class="nav-custom-tabs resp-tabs-list">
                                     <li class="nav-item resp-tab-item resp-tab-active" aria-controls="tab_item-0" role="tab">
                                         <i class="fas fa-plane fa-rotate-270"></i>
@@ -42,9 +34,12 @@
                                         <i class="fas fa-plane fa-rotate-270"></i>
                                         <span>Charter Plane</span></li>
                                 </ul>
+                              
                                 <div class="resp-tabs-container nav-custom-tab nav-custom-wide">
+                                    
                                     <div class="resp-tab-content" aria-labelledby="tab_item-0">
                                         <form class="small home-search-fm amadeus-flight-search" action="{{url('flight-search')}}" method="get">
+                                           <div class="alert alert-danger" id="errors" style="display:none"></div>
                                             {!! csrf_field() !!}
                                             @if(session()->has('message'))
                                             <div class="alert alert-danger">
@@ -61,7 +56,7 @@
                                                 </ul>
                                             </div>
                                             @endif
-                                            <div class="alert"></div>
+                                          
                                             <div class="row-20 row-md-23">
                                                 <div class="col-lg-8 padding-remove round-one-way">
                                                     <div class="form-wrap radio-inline-wrapper">
@@ -159,7 +154,7 @@
                                                 <div class="submit-fm text-xl-right">
                                                     <button class="button button-primary button-sm button-naira button-naira-up">
                                                         <span class="icon fas fa-search"></span>
-                                                        <span>Search</span>
+                                                        <span>Search  <i class="fa fa-spinner fa-spin show-loader" style="display:none"></i></span>
                                                     </button>
                                                 </div>
                                             </div>
@@ -748,6 +743,8 @@
             
            
             $(".amadeus-flight-search").on('submit', function (e) {
+                $("#errors").text('').removeClass('alert-danger').hide();
+                $(".show-loader").show();
                 e.preventDefault();
                 // return false;
                 var $this = $(this);
@@ -771,27 +768,25 @@
                 }
                 var parameters = '/' + passengerClass + '/' + flightType + '/' + from + '/' + to + '/' + departureVal + '/' + returnVal + '/' + passengerAdult + '/' + passengerChild + '/' + passengerInfant + '/' + '0';
                 actionUrlFinal = actionUrl + parameters;
-                // console.log(actionUrl);
-                // console.log(actionUrlFinal);
+               
                  $.ajax({
                      type: "GET",
                      url: actionUrlFinal,
                      dataType: "json",
                      success: function (data) {
-                        location.href = 'flight-search-listing' + parameters;
+                          $(".show-loader").hide();
+                       location.href = 'flight-search-listing' + parameters;
                      },
                      error: function (xhr, status, error) {
-                          var res = $.parseJSON(xhr.responseText);
-                         if(!res.status){
-                             var html = '';
-                             for(var i =0; i<res.errors.length; i++){
-                                 html += '<span style="display:flex; color:red">'+res.errors[i].detail+'</span>'; 
-                             }
-//                             $(".toast-body").append(html);
-//                             $(".toast").show();
-                          }
+                          $(".show-loader").hide();
+                          $("#errors").show(); 
+                         var res = $.parseJSON(xhr.responseText);
+                       
                          $(".amadeus-flight-search").find('.submit-fm button').attr("disabled", false);
                          siyApp.ajaxInputErrorAmadeus(res, $(".amadeus-flight-search"));
+                          if(res.message === 'No itinerary found for requested segment!'){
+                             $("#errors").addClass('alert-danger').text(res.message).show();
+                        }
                      }
                  });
                  e.preventDefault();

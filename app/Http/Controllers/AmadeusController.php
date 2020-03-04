@@ -25,7 +25,8 @@ class AmadeusController extends Controller {
     public function generateToken() {
 
         $curl = curl_init();
-
+        $key = ENV('AMADEUS_KEY');
+        $secret = ENV('AMADEUS_SECRET');
         curl_setopt_array($curl, array(
             CURLOPT_URL => "https://test.api.amadeus.com/v1/security/oauth2/token",
             CURLOPT_RETURNTRANSFER => true,
@@ -34,12 +35,12 @@ class AmadeusController extends Controller {
             CURLOPT_TIMEOUT => 30,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => "POST",
-            CURLOPT_POSTFIELDS => "client_id=4feqw2rFNnRlG1x5njSuAwZPqTVVLi0x&client_secret=2woTiWNQSlKOh7mI&grant_type=client_credentials",
+            CURLOPT_POSTFIELDS => "client_id=$key&client_secret=$secret&grant_type=client_credentials",
         ));
 
         $response = curl_exec($curl);
         $err = curl_error($curl);
-
+//dd($response);
         curl_close($curl);
 
         if ($err) {
@@ -353,7 +354,7 @@ class AmadeusController extends Controller {
         $data = Session::get('amadeus_result_data');
         
         if(!$data){
-            $makeRequest = $this->getFlightListing($passenger_class, $flight_type, $from, $to, $departure, $return = null, $passenger_adult = 1, $passenger_child = 0, $passenger_infant = 0, $popular_destination);
+            $makeRequest = $this->getFlightListing($passenger_class, $flight_type, $from, $to, $departure, $return, $passenger_adult = 1, $passenger_child = 0, $passenger_infant = 0, $popular_destination);
             $data = json_decode(json_encode($makeRequest), true)['original']['data'];
         }
 

@@ -21,6 +21,7 @@
             @stack('after-styles')
         </head>  
         <body>
+            
             <div id="app">
                 @yield('nav')
                 @include('includes.partials.logged-in-as')
