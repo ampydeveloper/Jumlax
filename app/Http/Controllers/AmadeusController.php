@@ -248,9 +248,8 @@ class AmadeusController extends Controller {
                         } else {
                             $flights[$key]['oneWayDetails']['stops']['total'] = $count - 1;
                             $carrierCode = [];
-                            $totalSeconds = 0;
                             foreach ($flight['itineraries'][0]['segments'] as $itinerarieKey => $itinerarieOneWay) {
-                                
+                                $totalSeconds = 0;
                                 if($itinerarieKey == 0) {
                                     $arrival = Carbon::parse($itinerarieOneWay['arrival']['at']);
                                 } else if($itinerarieKey != 0) {

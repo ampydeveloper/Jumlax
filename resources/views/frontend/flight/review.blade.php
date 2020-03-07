@@ -78,8 +78,11 @@
                             <?php } ?>
                             <ul class="list-unstyled list-inline">
                                 <li>{{$totalNumberOfStops}}</li>
-                                <?php $explode2 = explode('PT', $seg['duration']); ?>
-                                <li>{{$explode2[1]}}</li>
+                                <?php $explode2 = explode('PT', $seg['duration']);
+                                        $resStr1 = str_replace('H', ' hrs ', $explode2[1]);
+                                        $resStr1 = str_replace('M', ' mins', $resStr1);
+                                ?>
+                                <li>{{$resStr1}}</li>
                                 <!--<li>Classs name - Economy</li>-->
                             </ul>
                         </span>
@@ -96,7 +99,7 @@
                                 <span class="time">{{ \Carbon\Carbon::parse($val['departure']['at'])->format('h:i') }}</span>
                                 <span class="date">{{ \Carbon\Carbon::parse($val['departure']['at'])->format('l, d M y') }}</span>
                                 <span class="location">
-                                    {{$val['departure']['iataCode']}} <br>
+                                    {{$val['departure']['iataCode']}} <br/>
                                     @if($airports)
 
                                     @foreach($airports as $value)
@@ -107,6 +110,12 @@
                                     @break
                                     @endif
                                     @endforeach
+                                    @endif
+                                    <br/>
+                                    @if(isset($val['departure']['terminal']))
+                                    Terminal {{$val['departure']['terminal']}}
+                                    @else
+                                    Terminal -
                                     @endif
                                 </span>
                             </div>
@@ -142,6 +151,12 @@
                                     @break
                                     @endif
                                     @endforeach
+                                    @endif
+                                    <br/>
+                                    @if(isset($val['arrival']['terminal']))
+                                    Terminal {{$val['arrival']['terminal']}}
+                                    @else
+                                    Terminal -
                                     @endif
                                 </span>
                             </div>
