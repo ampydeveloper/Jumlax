@@ -155,7 +155,7 @@
                 @endif
 
 
-                <h5 class="w-top-box">Reference</h5>
+                <h5 class="w-top-box" id="scrollToHere">Reference</h5>
                 <?php // dd($requestdata); ?>
                 @if($requestdata)
                 <div class="white-box">
@@ -174,7 +174,7 @@
                     
                     <div id="content" class="payment_section">
 
-		<div class="payment_container top_space clearfix">
+                        <div class="payment_container top_space clearfix">
 
 			<!-- Payment-Option -->
 			<div class="payment_option pull-left">
@@ -183,18 +183,11 @@
 				<div class="option_tabs clearfix">
 
 					<div class="payment_widget clearfix">
-                                            
-                                            @if(session()->has('success'))
-                                                <div class="alert alert-success">
-                                                    {{ session()->get('success') }}
+                                            <div class="alert alert-success successMessageHere" style="display: none;">
                                                 </div>
-                                            @endif
 
-                                            @if(session()->has('error'))
-                                                <div class="alert alert-danger">
-                                                    {{ session()->get('error') }}
+                                                <div class="alert alert-danger errorMessageHere" style="display: none;">
                                                 </div>
-                                            @endif
                                             
 						<form name="formID" id="formID"
 							action="{{ route('frontend.payfull') }}"
@@ -209,8 +202,11 @@
 
 									<li id="CC_tab">
 										<a href="javascript:" rel="CC" class="clearfix active" id="CC">
-											<span class="card_icon payoption_icon"></span>
-											<span class="option_txt lato-regular">PayFull</span>
+                                                                                    <span class="">
+                                                                                        <img width="160" height="53" src="https://payfull.com/sites/all/themes/payfull2_theme/images/logo.png" class="custom-logo lazy" alt="S2M"
+                                                                                             style="height:20px; width:84px; margin: 12px 22px 20px 28px;">
+                                                                                    </span>
+<!--											<span class="option_txt lato-regular">PayFull</span>-->
 										</a>
 										<div class="other_inside_options" id="CC_subTabs">
 											<ul class="card_list">
@@ -221,8 +217,11 @@
 
 									<li id="NB_tab">
 										<a href="javascript:" id="process_payment" rel="NB" class="clearfix">
-											<span class="netbnkng_icon payoption_icon"></span>
-											<span class="option_txt lato-regular">S2M</span>
+                                                                                    <span class="">
+                                                                                        <img width="160" height="53" src="https://s2mworldwide.com/wp-content/uploads/2018/11/logo.png" class="custom-logo lazy" alt="S2M"
+                                                                                             style="height:20px; width:50px; margin: 15px 42px 22px 44px;">
+                                                                                    </span>
+											<!--<span class="option_txt lato-regular">S2M</span>-->
 										</a>
 										<div class="other_inside_options" id="NB_subTabs">
 											<ul class="card_list">
@@ -266,35 +265,31 @@
 												<p class="clearfix card_type_input">
                                                                                                     <input type="text" class="form-input form-control-last-child return"
 														name="customer_firstname"
+														id="customer_firstname"
                                                                                                                 placeholder="First name" required="">
 												</p>
-                                                                                                @error('customer_firstname')
-                                                                                                        <div class="alert alert-danger">{{ $message }}</div>
-                                                                                                    @enderror
+                                                                                                <div class="alert alert-danger customer_firstname" style="display: none;"></div>
                                                                                                 <p class="clearfix card_type_input">
                                                                                                     <input type="text" class="form-input form-control-last-child return"
 														name="customer_lastname"
+														id="customer_lastname"
                                                                                                                 placeholder="Last name" required="">
 												</p>
-                                                                                                @error('customer_lastname')
-                                                                                                        <div class="alert alert-danger">{{ $message }}</div>
-                                                                                                    @enderror
+                                                                                                <div class="alert alert-danger customer_lastname" style="display: none;"></div>
                                                                                                 <p class="clearfix card_type_input">
                                                                                                     <input type="text" class="form-input form-control-last-child return"
 														name="customer_email"
+														id="customer_email"
 														placeholder="Email" required="">
 												</p>
-                                                                                                @error('customer_email')
-                                                                                                        <div class="alert alert-danger">{{ $message }}</div>
-                                                                                                    @enderror
+                                                                                                <div class="alert alert-danger customer_email" style="display: none;"></div>
                                                                                                 <p class="clearfix card_type_input">
                                                                                                     <input type="text" class="form-input form-control-last-child return"
 														name="customer_phone"
+														id="customer_phone"
 														placeholder="Phone number" required="">
 												</p>
-                                                                                                @error('customer_phone')
-                                                                                                        <div class="alert alert-danger">{{ $message }}</div>
-                                                                                                    @enderror
+                                                                                                <div class="alert alert-danger customer_phone" style="display: none;"></div>
 											</div>
                                                                                     
 											<div class="input_section append_bottom20">
@@ -305,13 +300,11 @@
 												<p class="clearfix card_type_input">
 													<input type="tel" pattern="[0-9]*"
 														class="form-input form-control-last-child return"
-														id="PAYMENT_cardNumber" name="card_number"
+														name="card_number" id="card_number"
 														autocomplete="off" maxlength="19" tabindex="7"
 														placeholder="Enter card number here" value="">
 												</p>
-                                                                                                @error('card_number')
-                                                                                                        <div class="alert alert-danger">{{ $message }}</div>
-                                                                                                    @enderror
+                                                                                                <div class="alert alert-danger card_number" style="display: none;"></div>
 											</div>
 
 											<!-- Input-Section -->
@@ -322,12 +315,10 @@
 												<p class="clearfix card_type_input">
 													<input type="text"
 														class="form-input form-control-last-child return"
-														placeholder="Enter name here" id="PAYMENT_nameOnCard"
-														maxlength="40" tabindex="8" name="card_holder_name" value="">
+														placeholder="Enter name here"
+														maxlength="40" tabindex="8" name="card_holder_name" id="card_holder_name" value="">
 												</p>
-												@error('card_holder_name')
-                                                                                                        <div class="alert alert-danger">{{ $message }}</div>
-                                                                                                    @enderror
+                                                                                                <div class="alert alert-danger card_holder_name" style="display: none;"></div>
 											</div>
 
 											<div class="select_section clearfix append_bottom8" id="hiddenMaestroDiv">
@@ -339,7 +330,7 @@
                                                                                                     <span class="make_block input_label append_bottom8">&nbsp;</span>
 													<select
 														class="form-input select2-hidden-accessible"
-														id="PAYMENT_expiryMonth" name="card_month"
+														name="card_month" id="card_month"
 														tabindex="9">
 														<option value="" selected="selected">Month</option>
 
@@ -379,7 +370,7 @@
                                                                                                         
 													<select
 														class="form-input select2-hidden-accessible"
-														id="cc_year" tabindex="10" name="card_year">
+														id="card_year" tabindex="10" name="card_year">
 														<option value="" selected="selected">Year</option>
 
 														<option value="2020">2020</option>
@@ -468,8 +459,8 @@
                                                                                                             <span class="make_block input_label append_bottom8">&nbsp;</span>
 														<input type="password" pattern="[0-9]*"
 															class="form-input form-control validate[funcCall[payments.cardSection.cvv_alert]]"
-															placeholder="CVV" id="PAYMENT_cvv" tabindex="11"
-															name="card_cvc" maxlength="3">
+															placeholder="CVV" tabindex="11"
+															name="card_cvc" id="card_cvc" maxlength="3">
 													</span>
 													<!-- /Cvv -->
 											
@@ -497,19 +488,10 @@
 													<!-- /Cvv-Additional-info -->
                                                                                                 </div>
                                                                                                 </div>
-                                                                                        
-                                                                                        @if ($errors->any())
-                                                                                            <div class="alert alert-danger">
-                                                                                                <ul>
-                                                                                                    @foreach ($errors->all() as $error)
-                                                                                                    @if($error == 'card_month' || $error == 'card_year' || $error == 'card_cvc')
-                                                                                                        <li>{{ $error }}</li>
-                                                                                                    @endif    
-                                                                                                    @endforeach
+                                                                                        <div class="alert alert-danger cardDetailsErrors" style="display:none;">
+                                                                                                <ul class="cardErrors">
                                                                                                 </ul>
                                                                                             </div>
-                                                                                        @endif
-
 										</div>
 
 									</div>
@@ -532,12 +514,12 @@
 										</div>
 										<!-- /Payment-Amount-Info -->
                                                                                 
-                                                                                <input type="hidden" value="{{ $price['grandTotal'] }}" name="total" />
+                                                                                <input type="hidden" value="{{ $price['grandTotal'] }}" name="total" id="grandTotal" />
 
 										<!-- Payment-Button-Info -->
 										<div class="pull-right" id="make_payment_section" style="display: block;">
 											<p class="clearfix append_bottom6">
-                                                                                            <button type="submit" tabindex="19" class="button button-sm ladda-button"
+                                                                                            <button type="button" tabindex="19" class="button button-sm ladda-button"
                                                                                                         id="widgetPayBtn" style="background:#ed1d2d">
 													<!-- <span class="pull-left lock_icon">&nbsp;</span> --> <span
 														class="pull-left lock_txt lato-bold">Make Payment </span>
@@ -653,6 +635,61 @@
 @endsection
 @push('after-scripts')
 <script>
+    
+    $( document ).ready(function() {
+        $(".ladda-button").click(function() {
+            $('.alert-danger').hide();
+        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+            $.ajax({
+                url: '/process_payment',
+                type: 'POST',
+                /* send the csrf-token and the input to the controller */
+                data: {_token: CSRF_TOKEN, type: 'payfull', customer_firstname: $("#customer_firstname").val(),
+                    customer_lastname: $("#customer_lastname").val(), customer_email: $("#customer_email").val(),
+                    customer_phone: $("#customer_phone").val(), card_holder_name: $("#card_holder_name").val(),
+                    card_number: $("#card_number").val(), card_month: $("#card_month").val(), card_year: $("#card_year").val(),
+                    card_cvc: $("#card_cvc").val(), total: $("#grandTotal").val()},
+                dataType: 'JSON',
+                success: function (data) {
+                    $('html, body').animate({
+                        scrollTop: $("#scrollToHere").offset().top
+                    }, 2000);
+                    
+                    if (data.message == 'success'){
+                        window.location.href = "{{ url('booked') }}";
+                    } else if (e.info == 'error'){
+                        alert('There was an error processing your booking, please try again or contact support!');
+                    }
+                },
+                error: function (xhr, status, error) {
+                        $('.cardErrors').html('');
+                        var res = $.parseJSON(xhr.responseText);                        
+                        for (const [key, value] of Object.entries(res.errors)) {
+                            if($('.'+key)) {                                
+                                $('.'+key).show();
+                                $('.'+key).html(res.errors[key][0]);
+                            }
+                            
+                            if(key == 'card_year' || key == 'card_month' || key == 'card_cvc') {
+                                $('.cardDetailsErrors').show();
+                                $('.cardErrors').append('<li>'+res.errors[key][0]+'</li>');
+                            }
+                          }
+                        
+//                        console.log(res.errors['card_cvc']);
+                        
+//                        if(!res.status){
+//                             siyApp.ajaxInputErrorAmadeus(res, $("#most-search"));
+//                               if(res.message === 'No itinerary found for requested segment!.'){
+////                                 $("#most-search").find('.alert').addClass('alert-danger').text(res.message).show();
+//                                    $('.openAlert').click();
+//                             }
+//                         }
+                 }
+            });
+        });
+    });
+    
     $(function () {
         $('#process_payment').on('click', function(){
             var l = Ladda.create(document.querySelector('#process_payment'));

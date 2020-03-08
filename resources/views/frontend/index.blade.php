@@ -458,6 +458,38 @@
         </div>
 
     </section>
+
+    <button type="button" data-toggle="modal" data-target="#showAlert" class="openAlert" style="display: none;"></button>
+    
+    <!-- Modal -->
+  <div class="modal fade" id="showAlert" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog setModalCss" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+          <div class="row">
+              <div class="col-md-12">
+                  <h1>Sorry, No Flights for this Search</h1>
+              </div>
+          </div>
+          
+          <div class="">
+              <div class="col-md-12">
+                  <p>We cannot find any flights for the arrival city of your search. Please modify your search criteria and try again.
+                     We recommend you for a nearby airport.</p>
+              </div>
+          </div>
+          
+          <div class="">
+              <div class="col-md-12">
+                  <center><button type="button" class="btn btn-light" data-dismiss="modal">Go Back</button></center>
+              </div>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
     @endsection
     <style>
         .toast {
@@ -727,7 +759,7 @@
                      url: actionUrlFinal,
                      dataType: "json",
                      success: function (data) {
-                         console.log(data);
+//                         console.log(data);
                         location.href = 'flight-search-listing' + parameters;
                      },
                      error: function (xhr, status, error) {
@@ -735,7 +767,8 @@
                         if(!res.status){
                              siyApp.ajaxInputErrorAmadeus(res, $("#most-search"));
                                if(res.message === 'No itinerary found for requested segment!.'){
-                                 $("#most-search").find('.alert').addClass('alert-danger').text(res.message).show();
+//                                 $("#most-search").find('.alert').addClass('alert-danger').text(res.message).show();
+                                    $('.openAlert').click();
                              }
                          }
                  }
@@ -787,7 +820,8 @@
                          $(".amadeus-flight-search").find('.submit-fm button').attr("disabled", false);
                          siyApp.ajaxInputErrorAmadeus(res, $(".amadeus-flight-search"));
                           if(res.message === 'No itinerary found for requested segment!.'){
-                             $("#errors").addClass('alert-danger').text(res.message).show();
+//                             $("#errors").addClass('alert-danger').text(res.message).show();
+                                $('.openAlert').click();
                           }
                      }
                  });

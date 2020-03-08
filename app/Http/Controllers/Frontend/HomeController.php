@@ -343,6 +343,20 @@ class HomeController extends Controller {
                         $wp_error = 'error';
                     }
                 }
+            } else if ($request['type'] == 'payfull') {
+                
+                $res = $this->payfull($request);
+                
+                $res = json_decode(json_encode($res), true)['original'];
+                $booking_reference = substr(str_shuffle(str_repeat("0123456789abcdefghijklmnopqrstuvwxyz", 15)), 0, 15);
+                $payment_method = 'payfull';
+                
+                if($res['status']){
+                    $payment = true;
+                } else {
+                    $payment = false;
+                }
+                
             } else if ($request['type'] == 's2m') {
                 if (true) {
                     $payment_method = 's2m';
@@ -513,17 +527,18 @@ class HomeController extends Controller {
             'card_holder_name' => 'required',
             'card_number' => 'required',
             'card_month' => 'required',
-            'card_month' => 'required',
+            'card_year' => 'required',
             'card_cvc' => 'required',
             'total' => 'required',
         ]);
             
         $api_url = 'https://newdirection.payfull.com/integration/api/v1';
         $merchantPassword = 'ecologest12#$';
+        $lydToTry = 4.35;
         $params = array(
         "merchant"        => 'ecologest@gmail',
         "type"            => 'Sale',
-        "total"           => $request->total,
+        "total"           => $request->total*$lydToTry,
         "cc_name"         => $request->card_holder_name,
         "cc_number"       => $request->card_number,
         "cc_month"        => $request->card_month,
@@ -570,6 +585,9 @@ class HomeController extends Controller {
         $curlerr = curl_error($ch);
        
         $res = json_decode($response, true);
+        
+        return response()->json($res);
+        
         if($res['status']){
            return redirect()->back()->with('success', $res['ErrorMSG']);
         }else{
