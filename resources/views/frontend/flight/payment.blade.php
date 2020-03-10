@@ -75,14 +75,17 @@
                                 {{$seg['segments'][0]['departure']['iataCode']}}-{{$seg['segments'][$segment_count]['arrival']['iataCode']}} <br>
                             <?php } ?>
                             <ul class="list-unstyled list-inline">
-                                <li>{{$totalNumberOfStops}}</li>
-                                <?php $explode2 = explode('PT', $seg['duration']); ?>
-                                <li>{{$explode2[1]}}</li>
-                                <!--<li>Classs name - Economy</li>-->
-                            </ul>
+                                    <li>{{$totalNumberOfStops}}</li>
+                                    <?php $explode2 = explode('PT', $seg['duration']);
+                                        $resStr1 = str_replace('H', ' hrs ', $explode2[1]);
+                                        $resStr1 = str_replace('M', ' mins', $resStr1);
+                                    ?>
+                                    <li>{{$resStr1}}</li>
+                                    <!--<li>Classs name - Economy</li>-->
+                                </ul>
                         </span>
                     </div>
-                    @foreach($seg['segments'] as $val)
+                    @foreach($seg['segments'] as $key2 => $val)
                     <div class="content">
                         <div class="row">
                             <div class="col-sm-3 plane">
@@ -93,42 +96,67 @@
                                 <span class="time">{{ \Carbon\Carbon::parse($val['departure']['at'])->format('h:i') }}</span>
                                 <span class="date">{{ \Carbon\Carbon::parse($val['departure']['at'])->format('l, d M y') }}</span>
                                 <span class="location">
-                                    {{$val['departure']['iataCode']}} <br>
-                                    @if($airports)
+                                        {{$val['departure']['iataCode']}} <br>
+                                        @if($airports)
 
-                                    @foreach($airports as $value)
+                                        @foreach($airports as $value)
 
-                                    @if($value->airport_code == $val['departure']['iataCode'])
-                                    {{$value->airport_name}}
-                                    @break
-                                    @endif
-                                    @endforeach
-                                    @endif
-                                </span>
+                                        @if($value->airport_code == $val['departure']['iataCode'])
+                                        {{$value->airport_name}},
+                                        {{$value->city_name}}
+                                        @break
+                                        @endif
+                                        @endforeach
+                                        @endif
+                                        <br/>
+                                        @if(isset($val['departure']['terminal']))
+                                        Terminal {{$val['departure']['terminal']}}
+                                        @else
+                                        Terminal -
+                                        @endif
+                                    </span>
                             </div>
 
                             <div class="col-sm-3 all-time">
-                                <?php
-                                $explode1 = explode('PT', $val['duration']);
-                                ?>
-                                {{$explode1[1]}}
-                                <hr />
-                            </div>
+                                    <?php
+                                    $explode1 = explode('PT', $val['duration']);
+                                    $resStr = str_replace('H', ' hrs', $explode1[1]);
+                                    $resStr = str_replace('M', ' mins', $resStr);
+                                    ?>
+                                    {{$resStr}}
+                                    <hr />
+                                    @if($key == 0)
+                                        @if(isset($oneSide[$key2]))
+                                            {{$oneSide[$key2]}}
+                                        @endif
+                                    @else
+                                        @if(isset($returnSide[$key2]))
+                                            {{$returnSide[$key2]}}
+                                        @endif
+                                    @endif
+                                </div>
                             <div class="col-sm-3 destins">
-                                <span class="time">{{ \Carbon\Carbon::parse($val['arrival']['at'])->format('h:i') }}</span>
-                                <span class="date">{{ \Carbon\Carbon::parse($val['arrival']['at'])->format('l, d M y') }}</span>
-                                <span class="location">
-                                    {{$val['arrival']['iataCode']}} <br>
-                                    @if($airports)
-                                    @foreach($airports as $values)
-                                    @if($values->airport_code == $val['arrival']['iataCode'])
-                                    {{$values->airport_name}}
-                                    @break
-                                    @endif
-                                    @endforeach
-                                    @endif
-                                </span>
-                            </div>
+                                    <span class="time">{{ \Carbon\Carbon::parse($val['arrival']['at'])->format('h:i') }}</span>
+                                    <span class="date">{{ \Carbon\Carbon::parse($val['arrival']['at'])->format('l, d M y') }}</span>
+                                    <span class="location">
+                                        {{$val['arrival']['iataCode']}} <br>
+                                        @if($airports)
+                                        @foreach($airports as $values)
+                                        @if($values->airport_code == $val['arrival']['iataCode'])
+                                        {{$values->airport_name}},
+                                        {{$values->city_name}}
+                                        @break
+                                        @endif
+                                        @endforeach
+                                        @endif
+                                        <br/>
+                                        @if(isset($val['arrival']['terminal']))
+                                        Terminal {{$val['arrival']['terminal']}}
+                                        @else
+                                        Terminal -
+                                        @endif
+                                    </span>
+                                </div>
                         </div>
                     </div>
                     @endforeach
@@ -201,7 +229,7 @@
 								<ul class="tab_section pull-left card_list">
 
 									<li id="CC_tab">
-										<a href="javascript:" rel="CC" class="clearfix active" id="CC">
+										<a data-toggle="tab" href="#payfullTab" rel="CC" class="clearfix active" id="CC">
                                                                                     <span class="">
                                                                                         <img width="160" height="53" src="https://payfull.com/sites/all/themes/payfull2_theme/images/logo.png" class="custom-logo lazy" alt="S2M"
                                                                                              style="height:20px; width:84px; margin: 12px 22px 20px 28px;">
@@ -216,7 +244,8 @@
 									</li>
 
 									<li id="NB_tab">
-										<a href="javascript:" id="process_payment" rel="NB" class="clearfix">
+                                                                            <button id="process_payment" style="display: none;"></button>
+										<a data-toggle="tab" href="#s2mTab" rel="NB" class="clearfix activateS2m">
                                                                                     <span class="">
                                                                                         <img width="160" height="53" src="https://s2mworldwide.com/wp-content/uploads/2018/11/logo.png" class="custom-logo lazy" alt="S2M"
                                                                                              style="height:20px; width:50px; margin: 15px 42px 22px 44px;">
@@ -231,7 +260,8 @@
 									</li>
 
 								</ul>
-								<div class="card_details pull-left col-lg-10 col-md-10 col-sm-9 col-xs-8 tab_conatiner"
+                                                                <div class="tab-content">
+								<div id="payfullTab" class="tab-pane in active card_details pull-left col-lg-10 col-md-10 col-sm-9 col-xs-8 tab_conatiner"
 									id="paymentCanvas">
 
 									<div id="cardSection" class="clearfix append_bottom16" style="display: block;">
@@ -536,6 +566,18 @@
 
 									</div>
 								</div>
+                                                                
+                                                                <div id="s2mTab" class="tab-pane fade">
+                                                                    <center>
+                                                                    <div class="paymentLoader"></div>
+                                                                    </center>
+                                                                    <p>
+                                                                    Please wait, We are processing your request!
+                                                                    </p>
+                                                                </div>
+                                                                    
+                                                                    </div>
+                                                                
 							</div>
 						</form>
 					</div>
@@ -637,7 +679,12 @@
 <script>
     
     $( document ).ready(function() {
+        $(".activateS2m").click(function() {
+            $('#process_payment').click();
+        });
+        
         $(".ladda-button").click(function() {
+            $('.errorMessageHere').hide();
             $('.alert-danger').hide();
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
             $.ajax({
@@ -657,8 +704,9 @@
                     
                     if (data.message == 'success'){
                         window.location.href = "{{ url('booked') }}";
-                    } else if (e.info == 'error'){
-                        alert('There was an error processing your booking, please try again or contact support!');
+                    } else if (data.error){
+                        $('.errorMessageHere').show();
+                        $('.errorMessageHere').html(data.info.ErrorMSG);
                     }
                 },
                 error: function (xhr, status, error) {
@@ -715,7 +763,11 @@
 //                });
 //            } else if ($('input.s2m-method').prop('checked')){
                 l.start();
-                $('#s2m-method').submit();
+                
+                setTimeout(function(){
+                    $('#s2m-method').submit();
+                }, 3000);
+                
             // alert('payment intiated');
 //            }
             <?php if(isset($s2mSuccess) && $s2mSuccess){?> 

@@ -64,6 +64,8 @@ class HomeController extends Controller {
         Session::put('segment', $request->segment);
         Session::put('price', $request->price);
         Session::put('travelerPricings', $request->travelerPricings);
+        Session::put('oneSide', $request->oneWay);
+        Session::put('returnSide', $request->return);
         $data['segment'] = unserialize($request->segment);
         $data['price'] = unserialize($request->price);
         $data['travelerPricings'] = unserialize($request->travelerPricings);
@@ -107,10 +109,11 @@ class HomeController extends Controller {
 
     public function traveller_details() {
 
-
         $data['segment'] = unserialize(session::get('segment'));
         $data['price'] = unserialize(session::get('price'));
         $data['travelerPricings'] = unserialize(session::get('travelerPricings'));
+        $data['oneSide'] = unserialize(session::get('oneSide'));
+        $data['returnSide'] = unserialize(session::get('returnSide'));
         foreach ($data['segment'] as $key => $itinary) {
             $airport_code = [];
             foreach ($itinary['segments'] as $segment) {
@@ -228,6 +231,10 @@ class HomeController extends Controller {
             // exit();
             $data['segment'] = unserialize(session::get('segment'));
             $data['price'] = unserialize(session::get('price'));
+            
+            $data['oneSide'] = unserialize(session::get('oneSide'));
+            $data['returnSide'] = unserialize(session::get('returnSide'));
+            
             $airports = array();
             foreach ($data['segment'] as $key => $itinary) {
                 $airport_code = [];
@@ -355,6 +362,7 @@ class HomeController extends Controller {
                     $payment = true;
                 } else {
                     $payment = false;
+                    $wp_error = $res;
                 }
                 
             } else if ($request['type'] == 's2m') {

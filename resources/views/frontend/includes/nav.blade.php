@@ -53,7 +53,9 @@
                                 <div class="rd-navbar-panel">
                                     <button class="rd-navbar-toggle toggle-original" data-rd-navbar-toggle=".rd-navbar-nav-wrap"><span></span></button>
                                     <div class="rd-navbar-brand"><a class="d-inline-block brand-name" href="{{url('/')}}">
-                                            <img class="img-responsive center-block" src="{{ asset('/images/logo-white.png') }}" width="166" height="55" alt=""></a></div>
+                                            <img class="img-responsive center-block pull-left" src="{{ asset('/images/logo-white.png') }}" width="166" height="55" alt="">
+                                            <img class="img-responsive center-block pull-left" src="{{ asset('/images/jumlax-partners.jpg') }}" style="height: 50px; width: 50px; margin: 4px 10px;">
+                                        </a></div>
                                 </div>
                                 <div class="rd-navbar-nav-wrap toggle-original-elements">
                                     <ul class="rd-navbar-nav">
