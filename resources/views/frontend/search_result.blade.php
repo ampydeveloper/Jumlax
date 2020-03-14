@@ -10,14 +10,13 @@
 
 <section class="container-fluid search-nav-form">
     <div class="container">
-        <div class="toast" style="display: none" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="toast-header">
-                <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="toast-body">
-            </div>
+      <div id="error-show" class="alert alert-danger alert-dismissible fade" role="alert">
+            <button type="button" class="close error-close"  aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <ul class="p-0 m-0 error-check" style="list-style: none;">
+              
+            </ul>
         </div>
         <form class="small home-search-fm" action="{{url('flight-search')}}" method="get">
             <div class="row">
@@ -74,6 +73,10 @@
                                     <input class="form-input form-control-has-validation form-control-last-child" id="return" name="return" type="text" data-constraints="@Required" name="return" value="<?php (isset($requestdata['return']) && !empty($requestdata['return'])) ? $requestdata['return'] : ''; ?>">
                                 </div>
                             <?php } ?>
+                            <div class="col-sm-6" id="returnDate" style="display:none">
+                                    <label class="form-label-outside">Return</label>
+                                    <input class="form-input form-control-has-validation form-control-last-child" id="return" name="return" type="text" data-constraints="@Required" name="return" value="<?php (isset($requestdata['return']) && !empty($requestdata['return'])) ? $requestdata['return'] : ''; ?>">
+                            </div>
                         </div>
 
                         <div class="col-sm-4 col-lg-3 search-dividion-one">
@@ -101,7 +104,7 @@
                     <div class="submit-fm text-xl-right">
                         <button class="button button-primary button-sm button-naira button-naira-up" id="for-msubmit">
                             <span class="icon fas fa-search"></span>
-                            <span>Search</span>
+                            <span>Search  <i class="fa fa-spinner fa-spin show-loader" style="display:none"></i></span>
                         </button>
                     </div>
                 </div>
@@ -481,11 +484,15 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/simplePagination.js/1.6/jquery.simplePagination.js"></script>
 <script type="text/javascript">
 $(document).ready(function () {
+    
+    if($(".tripType option:selected").val() == 'round'){
+       $("#returnDate").css('display', 'block');
+    }
 
     var items = $(".list-tickets");
     var numItems = items.length;
-    var perPage = 5;
-    $(".total-user").text(numItems + ' Total Flight Search');
+    var perPage = 15;
+    $(".total-user").text(numItems + ' Total Flights');
     items.slice(perPage).hide();
     
     var pathname = window.location.href;
@@ -621,13 +628,24 @@ $(document).ready(function () {
             templateSelection: formatRepoSelection
         });
     });
+    
+ 
 
     $(".tripType").on('change', function () {
         if ($(this).val() == 'oneway') {
-            $(".return").val('');
-            $("#returnDateCol").css('display', 'none');
+            if($("#returnDateCol").length){
+                $(".return").val('');
+                $("#returnDateCol").css('display', 'none');
+            }else{
+                $(".return").val('');
+                $("#returnDate").css('display', 'none');
+            }
         } else {
-            $("#returnDateCol").css('display', 'block');
+            if($("#returnDateCol").length){
+                $("#returnDateCol").css('display', 'block');
+            }else{
+                $("#returnDate").css('display', 'block');
+            }
         }
     });
 
@@ -661,6 +679,9 @@ $(document).ready(function () {
         }
     })
     $(".home-search-fm").on('submit', function (e) {
+        $(".show-loader").show();
+         $("#error-show").removeClass('show')
+        $(".error-check").empty();
         e.preventDefault();
         // return false;
         var $this = $(this);
@@ -676,7 +697,9 @@ $(document).ready(function () {
                 passengerChild = $this.find('[name="passenger_child"]').val(),
                 passengerInfant = $this.find('[name="passenger_infant"]').val(),
                 actionUrl = $this.attr('action');
-        var returnData = $this.find('[name="return"]').val().trim();
+                if($this.find('[name="return"]').val()){
+                    var returnData = $this.find('[name="return"]').val().trim();
+                }
         if (returnData && returnData.length > 0) {
             returnVal = new Date(returnData).toJSON().slice(0, 10);
         } else {
@@ -691,25 +714,39 @@ $(document).ready(function () {
             url: actionUrlFinal,
             dataType: "json",
             success: function (data) {
-                console.log(data);
+               $(".show-loader").hide();
+               $("#error-show").hide();
+               $(".error-check").empty();
                 location.href = '/flight-search-listing' + parameters;
             },
             error: function (xhr, status, error) {
+                $(".show-loader").hide();
+                $(".error-check").empty();
                 var res = $.parseJSON(xhr.responseText);
                 if (!res.status) {
+                    console.log(res);
                     var html = '';
-                    for (var i = 0; i < res.errors.length; i++) {
-                        html += '<span style="display:flex; color:red">' + res.errors[i].detail + '</span>';
+                    if(res.message){
+                        html += '<li>' + res.message + '</li>';
                     }
-                    $(".toast-body").append(html);
-                    $(".toast").show();
+                    if(res.errors){
+                        for (var i = 0; i < res.errors.length; i++) {
+                            html += '<li>' + res.errors[i].detail + '</li>';
+                        }
+                    }
+                    $(".error-check").append(html);
+                    $("#error-show").addClass('show');
                 }
                 $(".home-search-fm").find('#for-msubmit').attr("disabled", false);
-                siyApp.ajaxInputError(error, $(".home-search-fm"));
+               // siyApp.ajaxInputError(error, $(".home-search-fm"));
             }
         });
         e.preventDefault();
     });
+    
+    $(".error-close").on('click', function(){
+        $("#error-show").removeClass('show');
+    })
 
 });
 </script>

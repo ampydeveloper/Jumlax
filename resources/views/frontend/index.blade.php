@@ -396,10 +396,10 @@
                 <input type="hidden" value="analytics.travelers.score" name="sort">
                 <input type="hidden" value="10" name="max">
                 <div class="submit-fm">
-                    <button class="button button-primary button-sm button-naira button-naira-up " data-city="DEL" id="popular-destination">
+<!--                    <button class="button button-primary button-sm button-naira button-naira-up " data-city="DEL" id="popular-destination">
                         <span class="icon fas fa-search"></span>
                         <span>find tickets</span>
-                    </button>
+                    </button>-->
                 </div>
             </form>
         </div>
@@ -593,7 +593,7 @@
                 templateResult: formatRepo,
                 templateSelection: formatRepoSelection
             });
-            $(".search-from").data('select2').$dropdown.find(':input.select2-search__field').attr('placeholder', 'Form');
+            $(".search-from").data('select2').$dropdown.find(':input.select2-search__field').attr('placeholder', 'From');
             $(".search-to").data('select2').$dropdown.find(':input.select2-search__field').attr('placeholder', 'To');
             //charter section
             $(".search-from-charter").select2({
