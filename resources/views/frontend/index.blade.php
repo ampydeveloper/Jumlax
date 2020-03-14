@@ -636,7 +636,6 @@
                 return $container;
             }
             function formatRepoCharterSelection(repo) {
-                console.log(repo);
                 return (repo.from != undefined) ? repo.from : 'Search Charter Plane';
             }
 
@@ -752,14 +751,11 @@
                 
                 var parameters = '/' + passengerClass + '/' + flightType + '/' + from + '/' + to + '/' + departureVal + '/' + returnVal + '/' + passengerAdult + '/' + passengerChild + '/' + passengerInfant + '/' + '0';
                 actionUrlFinal = actionUrl + parameters;
-                // console.log(actionUrl);
-                // console.log(actionUrlFinal);
                  $.ajax({
                      type: "GET",
                      url: actionUrlFinal,
                      dataType: "json",
                      success: function (data) {
-//                         console.log(data);
                         location.href = 'flight-search-listing' + parameters;
                      },
                      error: function (xhr, status, error) {

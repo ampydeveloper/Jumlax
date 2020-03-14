@@ -107,7 +107,6 @@ jQuery('document').ready(function ($) {
                     } else {
                         var textValue = v.detail;
                     }
-                    console.log(textValue);
                     var elementSel = formSel.find('[name="' + i + '"]');
                     if (elementSel.attr('type') == "radio") {
                         elementSel.addClass('is-invalid').parents('.radio-ul').append('<div class="invalid-feedback">' + textValue + '</div>');

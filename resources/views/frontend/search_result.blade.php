@@ -707,8 +707,7 @@ $(document).ready(function () {
         }
         var parameters = '/' + passengerClass + '/' + flightType + '/' + from + '/' + to + '/' + departureVal + '/' + returnVal + '/' + passengerAdult + '/' + passengerChild + '/' + passengerInfant + '/' + '0';
         actionUrlFinal = actionUrl + parameters;
-        // console.log(actionUrl);
-        // console.log(actionUrlFinal);
+        
         $.ajax({
             type: "GET",
             url: actionUrlFinal,
@@ -724,7 +723,6 @@ $(document).ready(function () {
                 $(".error-check").empty();
                 var res = $.parseJSON(xhr.responseText);
                 if (!res.status) {
-                    console.log(res);
                     var html = '';
                     if(res.message){
                         html += '<li>' + res.message + '</li>';

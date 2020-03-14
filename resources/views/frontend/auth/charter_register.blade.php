@@ -138,7 +138,6 @@
                 $('.organization_outer').show();
                 $('.customer_outer').hide();
             }
-            console.log(data);
         });
     });
 </script>

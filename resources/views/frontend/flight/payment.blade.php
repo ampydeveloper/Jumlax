@@ -724,8 +724,6 @@
                             }
                           }
                         
-//                        console.log(res.errors['card_cvc']);
-                        
 //                        if(!res.status){
 //                             siyApp.ajaxInputErrorAmadeus(res, $("#most-search"));
 //                               if(res.message === 'No itinerary found for requested segment!.'){
@@ -751,7 +749,6 @@
 //                        type: 'terawallet'
 //                    }
 //                }).done(function(e){
-//                    // console.log(e);
 //                    if (e.message == 'success'){
 //                        window.location.href = "{{ url('booked') }}";
 //                    } else if(e.info == 'low-balance'){
@@ -781,7 +778,6 @@
                         type: 's2m'
                     }
                 }).done(function(e){
-                    // console.log(e);
                     if (e.message == 'success'){
                         window.location.href = "{{ url('booked') }}";
                     } else if (e.message == 'fail'){
@@ -801,12 +797,10 @@
         });
 
         <?php if(isset($s2mSuccess) && $s2mSuccess){?>
-            // console.log('yeah');
             $('#process_payment').trigger('click');
         <?php }?>
         <?php if(isset($s2mFailed) && $s2mFailed){?>
             alert('Your card payment was not successful, please try-again!');
-            // console.log('nae');
             // $('#process_payment').trigger('click');
         <?php }?>
     });

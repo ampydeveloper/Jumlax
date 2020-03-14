@@ -63,7 +63,6 @@ $(document).ready(function () {
         $(".from-list-to").toggle();
     })
     $(".search-to li").on('click', function () {
-        console.log(this);
         $("#flight-to").val($(this).attr('data-to'));
         $(".from-list-to").toggle();
     });
