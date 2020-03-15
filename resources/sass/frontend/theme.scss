@@ -1150,6 +1150,15 @@ ul.currency_options li.is-active a {
     left: 38%;
 }
 
+.phoneNumber {
+    .stepper-arrow.up {
+        display: none !important;
+    }
+    .stepper-arrow.down {
+        display: none !important;
+    }
+}
+
 .paymentLoader {
   border: 16px solid #f3f3f3;
   border-radius: 50%;

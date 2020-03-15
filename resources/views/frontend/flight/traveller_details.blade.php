@@ -94,7 +94,7 @@
                             <div class="row">
                                 <div class="col-sm-3 plane">
                                     <img src="http://pics.avs.io/60/24/{{$val['carrierCode']}}.png" alt=""><br>
-                                    {{$val['aircraft']['code']}}
+                                    {{$val['carrierCode'] .'-'. $val['aircraft']['code']}}
                                 </div>
                                 <div class="col-sm-3 destins">
                                     <span class="time">{{ \Carbon\Carbon::parse($val['departure']['at'])->format('h:i') }}</span>
@@ -124,7 +124,7 @@
                                 <div class="col-sm-3 all-time">
                                     <?php
                                     $explode1 = explode('PT', $val['duration']);
-                                    $resStr = str_replace('H', ' hrs', $explode1[1]);
+                                    $resStr = str_replace('H', ' hrs ', $explode1[1]);
                                     $resStr = str_replace('M', ' mins', $resStr);
                                     ?>
                                     {{$resStr}}
@@ -255,8 +255,8 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-sm-4">
-                                        <input type="text" class="form-input" required name="phone_number[]" value="{{old('phone_number.$i')}}" placeholder="Phone Number"/>
+                                    <div class="col-sm-4 phoneNumber">
+                                        <input type="number" class="form-input" required name="phone_number[]" value="{{old('phone_number.$i')}}" placeholder="Phone Number"/>
                                         @if ($errors->has('phone_number'))
                                         <span class="error">
                                             <strong>{{ $errors->first('phone_number') }}</strong>

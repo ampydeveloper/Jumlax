@@ -47,7 +47,10 @@
                                                         @if($flight['booking_details']['returnDuration']) 
                                                         <div class="plane-details">
                                                             <span>Return | </span>
-                                                            {{$flight['booking_details']['returnDepatureDate']. " | ".$flight['booking_details']['returnCarrierName']}} 
+                                                            @php
+                                                            $returnCarrier = isset($flight['booking_details']['returnCarrierName']) ? " | ".$flight['booking_details']['returnCarrierName']:'';
+                                                            @endphp
+                                                            {{$flight['booking_details']['returnDepatureDate'].$returnCarrier}} 
                                                         </div> 
                                                         @endif
                                                     </div> 
@@ -64,11 +67,22 @@
                                                                     @endif
                                                                 </div>
                                                                 <div class="list-item-content-line-wrapper small">
-                                                                    <div class="list-item-content-line-top"> 
-                                                                        {{$flight['booking_details']['totalOnwayDuration']}}
+                                                                    <div class="list-item-content-line-top">
+                                                                        @php
+                                                                        $resStr1 = str_replace('H', ' hrs ', $flight['booking_details']['totalOnwayDuration']);
+                                                                        $resStr1 = str_replace('M', ' mins', $resStr1);
+                                                                        @endphp
+                                                                        {{$resStr1}}
                                                                     </div>
+                                                                  
+                                                                    {{dd(json_decode(json_encode($flight['segment']), true))}}
+                                                                    
+<!--                                                                    @php
+                                                                    $toolTipData = $flight['booking_details']['onwayNoOfStops']." Plane Change"
+                                                                    @endphp-->
+                                                                    
                                                                     <div class="list-item-content-line"></div>
-                                                                    <div class="list-item-content-line-bottom text-info-dr">
+                                                                    <div class="list-item-content-line-bottom text-info-dr link" data-tooltip="1234567890">
                                                                         {{$flight['booking_details']['onwayNoOfStops']}} stops
                                                                     </div>
                                                                 </div>
@@ -96,7 +110,11 @@
                                                                 </div>
                                                                 <div class="list-item-content-line-wrapper small" >
                                                                     <div class="list-item-content-line-top">
-                                                                        {{ $flight['booking_details']['returnDuration'] }}
+                                                                        @php
+                                                                        $resStr1 = str_replace('H', ' hrs ', $flight['booking_details']['returnDuration']);
+                                                                        $resStr1 = str_replace('M', ' mins', $resStr1);
+                                                                        @endphp
+                                                                        {{ $resStr1 }}
                                                                     </div>
                                                                     <div class="list-item-content-line"></div>
                                                                     <div class="list-item-content-line-bottom text-info-dr">

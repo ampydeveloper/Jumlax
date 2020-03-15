@@ -123,7 +123,7 @@
                             <div class="col-sm-3 all-time">
                                 <?php
                                 $explode1 = explode('PT', $val['duration']);
-                                $resStr = str_replace('H', ' hrs', $explode1[1]);
+                                $resStr = str_replace('H', ' hrs ', $explode1[1]);
                                 $resStr = str_replace('M', ' mins', $resStr);
                                 ?>
                                 {{$resStr}}

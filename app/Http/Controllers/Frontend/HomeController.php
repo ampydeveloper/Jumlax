@@ -174,22 +174,21 @@ class HomeController extends Controller {
     }
 
     public function payment(Request $request) {
-//        dd($request->toArray());
-//        $this->validate(request(), [
-//            'name' => 'required|array',
-//            'nationality' => 'required|array',
-//            'gender' => 'required|array',
-//            'passport' => 'required|array',
-//            'expiry_date' => 'required|array|date_format:DD/MM/YY',
-//            'birth_date' => 'required|array|date_format:DD/MM/YY',
-//            'phone_number' => 'required|array|regex:/(01)[0-9]{9}/',
-//            'email' => 'required|array|email',
-//            'address' => 'required|array',
-//            'agree' => 'required',
-//            'reference_passenger_name' => 'required',
-//            'reference' => 'required',
-//            'reference_gender' => 'required',
-//        ]);
+        $this->validate(request(), [
+            'name' => 'required|array',
+            'nationality' => 'required|array',
+            'gender' => 'required|array',
+            'passport' => 'required|array',
+            'expiry_date' => 'required',
+            'birth_date' => 'required',
+            'phone_number' => 'required|array',
+            'email' => 'required|array',
+            'address' => 'required|array',
+            'agree' => 'required',
+            'reference_passenger_name' => 'required',
+            'reference' => 'required',
+            'reference_gender' => 'required',
+        ]);
         Session::put('passangerDetail', $request->all());
 
         if (Auth()->user()) {

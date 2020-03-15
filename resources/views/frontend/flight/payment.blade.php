@@ -90,7 +90,7 @@
                         <div class="row">
                             <div class="col-sm-3 plane">
                                 <img src="http://pics.avs.io/60/24/{{$val['carrierCode']}}.png" alt=""><br>
-                                {{$val['aircraft']['code']}}
+                                {{$val['carrierCode'] .'-'. $val['aircraft']['code']}}
                             </div>
                             <div class="col-sm-3 destins">
                                 <span class="time">{{ \Carbon\Carbon::parse($val['departure']['at'])->format('h:i') }}</span>
@@ -120,7 +120,7 @@
                             <div class="col-sm-3 all-time">
                                     <?php
                                     $explode1 = explode('PT', $val['duration']);
-                                    $resStr = str_replace('H', ' hrs', $explode1[1]);
+                                    $resStr = str_replace('H', ' hrs ', $explode1[1]);
                                     $resStr = str_replace('M', ' mins', $resStr);
                                     ?>
                                     {{$resStr}}
@@ -173,7 +173,8 @@
                     <div class="contt">
                         <div class="row">
                             <div class="col-sm-12">
-                                {{$count}}. {{$name}} {{$requestdata['name'][$key]}}, {{$requestdata['phone_number'][$key]}}, {{$requestdata['gender'][$key]}}
+                                <!--{{$name}}-->
+                                {{$count}}. {{$requestdata['name'][$key]}}, {{$requestdata['phone_number'][$key]}}, {{$requestdata['gender'][$key]}}
                             </div>
                         </div>
                     </div>
@@ -568,9 +569,11 @@
 								</div>
                                                                 
                                                                 <div id="s2mTab" class="tab-pane fade">
-                                                                    <center>
-                                                                    <div class="paymentLoader"></div>
-                                                                    </center>
+                                                                        <center>
+                                                                            <div class="setMargin">
+                                                                                <div class="paymentLoader"></div>
+                                                                            </div>
+                                                                        </center>
                                                                     <p>
                                                                     Please wait, We are processing your request!
                                                                     </p>
@@ -761,9 +764,9 @@
 //            } else if ($('input.s2m-method').prop('checked')){
                 l.start();
                 
-                setTimeout(function(){
-                    $('#s2m-method').submit();
-                }, 3000);
+//                setTimeout(function(){
+//                    $('#s2m-method').submit();
+//                }, 3000);
                 
             // alert('payment intiated');
 //            }
