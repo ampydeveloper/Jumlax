@@ -764,9 +764,9 @@
 //            } else if ($('input.s2m-method').prop('checked')){
                 l.start();
                 
-//                setTimeout(function(){
-//                    $('#s2m-method').submit();
-//                }, 3000);
+                setTimeout(function(){
+                    $('#s2m-method').submit();
+                }, 3000);
                 
             // alert('payment intiated');
 //            }

@@ -73,16 +73,13 @@
                                                                         $resStr1 = str_replace('M', ' mins', $resStr1);
                                                                         @endphp
                                                                         {{$resStr1}}
-                                                                    </div>
-                                                                  
-                                                                    {{dd(json_decode(json_encode($flight['segment']), true))}}
-                                                                    
+                                                                    </div>  
 <!--                                                                    @php
                                                                     $toolTipData = $flight['booking_details']['onwayNoOfStops']." Plane Change"
                                                                     @endphp-->
                                                                     
                                                                     <div class="list-item-content-line"></div>
-                                                                    <div class="list-item-content-line-bottom text-info-dr link" data-tooltip="1234567890">
+                                                                    <div class="list-item-content-line-bottom text-info-dr link" data-tooltip="">
                                                                         {{$flight['booking_details']['onwayNoOfStops']}} stops
                                                                     </div>
                                                                 </div>
@@ -290,7 +287,7 @@
                                                         @if($flight['booking_details']['returnDuration']) 
                                                         <div class="plane-details">
                                                             <span>Return | </span>
-                                                            {{$flight['booking_details']['returnDepatureDate']. " | ".$flight['booking_details']['returnCarrierName']}} 
+                                                            {{$flight['booking_details']['returnDepatureDate']. " | ".isset($flight['booking_details']['returnCarrierName'])}} 
                                                         </div> 
                                                         @endif
                                                     </div> 
